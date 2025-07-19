@@ -414,6 +414,25 @@
             margin-bottom: 30px;
         }
         
+        .export-buttons {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin: 30px 0;
+        }
+        
+        .methodology-guide {
+            background: #f0f0f0;
+            border-radius: 12px;
+            padding: 25px;
+            margin: 20px 0;
+            display: none;
+        }
+        
+        .methodology-guide.show {
+            display: block;
+        }
+        
         @media (max-width: 768px) {
             .main-content {
                 padding: 20px;
@@ -690,13 +709,56 @@
                     <button class="btn btn-primary" onclick="nextStep()" id="goalResponseNext" disabled>Complete Workshop →</button>
                 </div>
             </div>
+            
+            <!-- Step 6: Workshop Complete -->
+            <div class="step" id="step6">
+                <div class="step-header">
+                    <div class="step-number">✅</div>
+                    <h2 class="step-title">Workshop Complete!</h2>
+                    <p class="step-description">Your AI-powered innovation roadmap is ready</p>
+                </div>
+                
+                <div class="summary-section">
+                    <div class="summary-title">🎯 Your Breakthrough Goal</div>
+                    <div id="finalGoalSummary" style="font-size: 1.1em; margin-bottom: 20px; padding: 15px; background: #f0f0f0; border-radius: 8px;"></div>
+                </div>
+                
+                <div class="summary-section">
+                    <div class="summary-title">🤖 AI Analysis & Recommendations</div>
+                    <div id="finalAIAnalysis" style="max-height: 300px; overflow-y: auto; padding: 15px; background: #f8f9fa; border-radius: 8px; white-space: pre-wrap;"></div>
+                </div>
+                
+                <div class="summary-section">
+                    <div class="summary-title">📋 Next Steps</div>
+                    <div style="padding: 15px; background: #f0f8f0; border-radius: 8px;">
+                        <ol style="margin-left: 20px;">
+                            <li><strong>Test Key Assumptions:</strong> Start with your highest-risk assumptions identified by AI</li>
+                            <li><strong>30-Day Validation:</strong> Run the specific tests suggested in your analysis</li>
+                            <li><strong>Develop Business Case:</strong> Use AI insights to build detailed business plan</li>
+                            <li><strong>Secure Resources:</strong> Based on implementation roadmap requirements</li>
+                            <li><strong>Schedule Follow-up:</strong> Review progress and iterate in 6 weeks</li>
+                        </ol>
+                    </div>
+                </div>
+                
+                <div class="export-buttons">
+                    <button class="btn btn-primary" onclick="exportResults('summary')">📄 Download Summary</button>
+                    <button class="btn btn-primary" onclick="exportResults('email')">📧 Email Results</button>
+                    <button class="btn btn-secondary" onclick="showMethodologyGuide()">📖 Learn the Process</button>
+                </div>
+                
+                <div class="buttons">
+                    <button class="btn btn-secondary" onclick="prevStep()">← Back to Results</button>
+                    <button class="btn btn-primary" onclick="restartWorkshop()">Start New Workshop</button>
+                </div>
+            </div>
         </div>
     </div>
 
     <script>
         // Global state
         let currentStep = 1;
-        let totalSteps = 5;
+        let totalSteps = 6; // Updated to include completion step
         let selectedScenario = null;
         let workshopData = {};
         
@@ -828,6 +890,188 @@
             }
         }
         
+        function exportResults(format) {
+            const fullResults = {
+                team: {
+                    name: workshopData.teamName,
+                    context: workshopData.teamContext
+                },
+                scenario: workshopData.scenario,
+                uncertainties: workshopData.uncertainties,
+                goal: workshopData.goalLadder,
+                aiAnalysis: workshopData.goalAIResponse
+            };
+            
+            switch(format) {
+                case 'summary':
+                    generateSummary(fullResults);
+                    break;
+                case 'email':
+                    emailResults(fullResults);
+                    break;
+            }
+        }
+        
+        function generateSummary(results) {
+            const content = `AI INNOVATION WORKSHOP RESULTS
+=====================================
+
+Team: ${results.team.name}
+Context: ${results.team.context || 'Not specified'}
+Date: ${new Date().toLocaleDateString()}
+
+SELECTED SCENARIO:
+${results.scenario?.title || 'Not specified'}
+${results.scenario?.description || ''}
+
+TEAM UNCERTAINTIES:
+${results.uncertainties ? results.uncertainties.map((u, i) => `${i+1}. ${u}`).join('\n') : 'None specified'}
+
+BREAKTHROUGH GOAL:
+${results.goal?.lead || 'Not specified'}
+
+CURRENT REALITY (ANCHOR):
+${results.goal?.anchor || 'Not specified'}
+
+STRATEGIC REASONING (DETAIL):
+${results.goal?.detail || 'Not specified'}
+
+CRITICAL ASSUMPTIONS (DECLARE):
+${results.goal?.declare || 'Not specified'}
+
+ANALYSIS NEEDED (EXPLAIN):
+${results.goal?.explain || 'Not specified'}
+
+DELIVERABLES REQUESTED:
+${results.goal?.request || 'Not specified'}
+
+AI ANALYSIS & RECOMMENDATIONS:
+${results.aiAnalysis || 'No AI analysis provided'}
+
+NEXT STEPS:
+1. Test top 3 assumptions within 30 days
+2. Develop pilot program for most promising opportunity
+3. Schedule follow-up session in 6 weeks
+4. Use LADDER framework for future innovation projects
+
+METHODOLOGY LEARNED:
+✓ Reverse-engineering from audacious goals
+✓ Uncertainty injection into scenarios
+✓ LADDER framework for AI collaboration
+✓ Assumption-driven innovation development
+
+Generated by AI Innovation Workshop Tool | Chock
+Visit: https://chock.llc for more innovation tools
+            `;
+            
+            const blob = new Blob([content], { type: 'text/plain' });
+            const url = window.URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `${(results.team.name || 'Team').replace(/\s+/g, '_')}_AI_Workshop_Results.txt`;
+            a.click();
+            window.URL.revokeObjectURL(url);
+        }
+        
+        function emailResults(results) {
+            const subject = `AI Innovation Workshop Results - ${results.team.name}`;
+            const body = `Hi team,
+
+Here are our AI Innovation Workshop results:
+
+BREAKTHROUGH GOAL:
+${results.goal?.lead || 'Not specified'}
+
+KEY UNCERTAINTIES WE IDENTIFIED:
+${results.uncertainties ? results.uncertainties.map((u, i) => `${i+1}. ${u}`).join('\n') : 'None specified'}
+
+AI RECOMMENDATIONS SUMMARY:
+${results.aiAnalysis ? results.aiAnalysis.substring(0, 500) + '...' : 'See full analysis in downloaded summary'}
+
+NEXT STEPS:
+1. Test our key assumptions (details in full summary)
+2. Develop pilot program for top opportunity
+3. Schedule follow-up in 6 weeks
+
+Ready to reverse-engineer the future!
+
+Best regards,
+The Innovation Team
+
+Generated by Chock AI Innovation Workshop Tool`;
+            
+            const mailtoLink = `mailto:?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+            window.location.href = mailtoLink;
+        }
+        
+        function showMethodologyGuide() {
+            alert(`REVERSE-ENGINEERING INNOVATION METHODOLOGY
+
+You've just experienced a systematic approach to breakthrough innovation:
+
+1. START WITH THE FUTURE
+   • Choose exciting scenarios, not current problems
+   • Make uncertainties explicit and valuable
+
+2. CRAFT AUDACIOUS GOALS  
+   • Use LADDER framework for structured thinking
+   • Aim for 10x improvements, not incremental
+
+3. LEVERAGE AI AS THINKING PARTNER
+   • AI enhances human judgment, doesn't replace it
+   • LADDER prompts ensure comprehensive analysis
+
+4. FOCUS ON BUSINESS OPPORTUNITIES
+   • Let validated insights guide opportunities
+   • Focus on concrete value propositions with timelines
+
+APPLY THIS TO ANY INNOVATION CHALLENGE:
+• Strategic planning sessions
+• New product development  
+• Market entry decisions
+• Technology roadmapping
+
+KEY INSIGHT: Working backward from success reveals assumptions and opportunities that forward planning misses.
+
+Visit chock.llc for more innovation tools and workshops.`);
+        }
+        
+        function restartWorkshop() {
+            if (confirm('Are you sure you want to start a new workshop? All current progress will be lost.')) {
+                // Reset all data
+                currentStep = 1;
+                selectedScenario = null;
+                workshopData = {};
+                
+                // Hide all steps
+                document.querySelectorAll('.step').forEach(step => {
+                    step.classList.remove('active');
+                });
+                
+                // Show first step
+                document.getElementById('step1').classList.add('active');
+                
+                // Clear all form fields
+                document.querySelectorAll('input, textarea').forEach(field => {
+                    field.value = '';
+                });
+                
+                // Reset scenario selection
+                document.querySelectorAll('.scenario-card').forEach(card => {
+                    card.classList.remove('selected');
+                });
+                
+                // Reset progress
+                updateProgress();
+                
+                // Disable buttons that require input
+                const scenarioNext = document.getElementById('scenarioNext');
+                const goalResponseNext = document.getElementById('goalResponseNext');
+                if (scenarioNext) scenarioNext.disabled = true;
+                if (goalResponseNext) goalResponseNext.disabled = true;
+            }
+        }
+        
         function saveCurrentStepData() {
             switch(currentStep) {
                 case 1:
@@ -881,6 +1125,16 @@
                     if (workshopData.goalLadder) {
                         const prompt = generateLadderPrompt(workshopData.goalLadder, 'goal');
                         document.getElementById('goalPrompt').textContent = prompt;
+                    }
+                    break;
+                    
+                case 6:
+                    // Populate completion summary
+                    if (workshopData.goalLadder) {
+                        document.getElementById('finalGoalSummary').textContent = workshopData.goalLadder.lead;
+                    }
+                    if (workshopData.goalAIResponse) {
+                        document.getElementById('finalAIAnalysis').textContent = workshopData.goalAIResponse;
                     }
                     break;
             }
