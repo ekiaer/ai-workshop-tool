@@ -1,0 +1,1067 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Innovation Workshop Tool | Chock</title>
+    <link rel="icon" type="image/x-icon" href="favicon.ico">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=PT+Sans+Narrow:wght@400;700&display=swap');
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            line-height: 1.6;
+            background: #f5f5f5;
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+        
+        .header {
+            background: #000000;
+            color: white;
+            padding: 30px 40px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            position: relative;
+        }
+        
+        .header-left {
+            display: flex;
+            align-items: center;
+            gap: 30px;
+        }
+        
+        .logo {
+            width: 80px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+        
+        .header h1 {
+            font-family: 'PT Sans Narrow', sans-serif;
+            font-size: 2.5em;
+            margin: 0;
+            font-weight: 700;
+            letter-spacing: 1px;
+        }
+        
+        .header p {
+            font-size: 1.2em;
+            opacity: 0.9;
+            margin-top: 5px;
+        }
+        
+        .progress-bar {
+            height: 8px;
+            background: rgba(255,255,255,0.2);
+            margin-top: 20px;
+            border-radius: 4px;
+            overflow: hidden;
+        }
+        
+        .progress-fill {
+            height: 100%;
+            background: #fff;
+            width: 20%;
+            transition: width 0.5s ease;
+            border-radius: 4px;
+        }
+        
+        .main-content {
+            padding: 40px;
+        }
+        
+        .step {
+            display: none;
+            animation: fadeIn 0.5s ease-in;
+        }
+        
+        .step.active {
+            display: block;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .step-header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+        
+        .step-number {
+            display: inline-block;
+            width: 60px;
+            height: 60px;
+            background: #000000;
+            color: white;
+            border-radius: 50%;
+            font-size: 24px;
+            font-weight: bold;
+            line-height: 60px;
+            margin-bottom: 15px;
+        }
+        
+        .step-title {
+            font-size: 2em;
+            color: #000000;
+            margin-bottom: 10px;
+            font-family: 'PT Sans Narrow', sans-serif;
+        }
+        
+        .step-description {
+            font-size: 1.1em;
+            color: #666;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+        
+        .scenario-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin: 30px 0;
+        }
+        
+        .scenario-card {
+            border: 2px solid #e0e0e0;
+            border-radius: 12px;
+            padding: 25px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            background: #f8f9fa;
+        }
+        
+        .scenario-card:hover {
+            border-color: #000000;
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        }
+        
+        .scenario-card.selected {
+            border-color: #000000;
+            background: #f0f0f0;
+        }
+        
+        .scenario-title {
+            font-size: 1.3em;
+            font-weight: bold;
+            color: #000000;
+            margin-bottom: 15px;
+        }
+        
+        .scenario-description {
+            color: #666;
+            margin-bottom: 15px;
+        }
+        
+        .scenario-impact {
+            font-size: 0.9em;
+            color: #333;
+            font-weight: 600;
+        }
+        
+        .form-group {
+            margin-bottom: 25px;
+        }
+        
+        .form-label {
+            display: block;
+            font-weight: 600;
+            color: #000000;
+            margin-bottom: 8px;
+            font-size: 1.1em;
+            font-family: 'PT Sans Narrow', sans-serif;
+        }
+        
+        .form-input, .form-textarea {
+            width: 100%;
+            padding: 15px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 16px;
+            transition: border-color 0.3s ease;
+            font-family: inherit;
+        }
+        
+        .form-input:focus, .form-textarea:focus {
+            outline: none;
+            border-color: #000000;
+        }
+        
+        .form-textarea {
+            min-height: 100px;
+            resize: vertical;
+        }
+        
+        .uncertainty-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 15px;
+            margin: 20px 0;
+        }
+        
+        .uncertainty-item {
+            background: #f8f9fa;
+            border: 1px solid #e0e0e0;
+            border-radius: 8px;
+            padding: 15px;
+        }
+        
+        .uncertainty-input {
+            width: 100%;
+            border: none;
+            background: transparent;
+            font-size: 16px;
+            padding: 5px 0;
+        }
+        
+        .uncertainty-input:focus {
+            outline: none;
+            border-bottom: 2px solid #000000;
+        }
+        
+        .ladder-section {
+            background: #f8f9fa;
+            border-radius: 12px;
+            padding: 25px;
+            margin: 20px 0;
+        }
+        
+        .ladder-letter {
+            display: inline-block;
+            width: 40px;
+            height: 40px;
+            background: #000000;
+            color: white;
+            border-radius: 50%;
+            text-align: center;
+            line-height: 40px;
+            font-weight: bold;
+            margin-right: 15px;
+            margin-bottom: 10px;
+        }
+        
+        .ladder-field {
+            margin-bottom: 20px;
+        }
+        
+        .ladder-label {
+            font-weight: 600;
+            color: #000000;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            font-family: 'PT Sans Narrow', sans-serif;
+            font-size: 1.3em;
+        }
+        
+        .copy-template-btn {
+            padding: 5px 10px !important;
+            font-size: 12px !important;
+            margin-left: auto;
+            background: #666666;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        
+        .template-text {
+            background: #f0f0f0;
+            border: 1px solid #d0d0d0;
+            border-radius: 6px;
+            padding: 12px;
+            margin-bottom: 10px;
+            font-size: 14px;
+            line-height: 1.4;
+        }
+        
+        .template-text strong {
+            color: #000000;
+        }
+        
+        .ladder-hint {
+            font-size: 0.9em;
+            color: #666;
+            margin-bottom: 10px;
+            font-style: italic;
+        }
+        
+        .buttons {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 40px;
+            gap: 20px;
+        }
+        
+        .btn {
+            padding: 15px 30px;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-block;
+            text-align: center;
+            font-family: 'PT Sans Narrow', sans-serif;
+        }
+        
+        .btn-primary {
+            background: #000000;
+            color: white;
+        }
+        
+        .btn-primary:hover:not(:disabled) {
+            opacity: 0.8;
+        }
+        
+        .btn-secondary {
+            background: #666666;
+            color: white;
+        }
+        
+        .btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+        
+        .ai-response {
+            background: #f8f9fa;
+            border: 1px solid #e0e0e0;
+            border-radius: 12px;
+            padding: 25px;
+            margin: 20px 0;
+        }
+        
+        .ai-response-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+        
+        .ai-icon {
+            width: 30px;
+            height: 30px;
+            background: #000000;
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 10px;
+            font-weight: bold;
+        }
+        
+        .prompt-output {
+            background: #fafafa;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            padding: 20px;
+            font-family: 'Monaco', 'Menlo', monospace;
+            font-size: 14px;
+            line-height: 1.5;
+            white-space: pre-wrap;
+            max-height: 400px;
+            overflow-y: auto;
+            margin: 10px 0;
+        }
+        
+        .summary-section {
+            background: #f8f9fa;
+            border-radius: 12px;
+            padding: 25px;
+            margin: 20px 0;
+        }
+        
+        .summary-title {
+            font-size: 1.5em;
+            color: #000000;
+            margin-bottom: 15px;
+            font-weight: bold;
+            font-family: 'PT Sans Narrow', sans-serif;
+        }
+        
+        .team-info {
+            background: #f5f5f5;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 30px;
+        }
+        
+        @media (max-width: 768px) {
+            .main-content {
+                padding: 20px;
+            }
+            
+            .scenario-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .buttons {
+                flex-direction: column;
+            }
+            
+            .btn {
+                width: 100%;
+            }
+            
+            .header-left {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 10px;
+            }
+            
+            .logo {
+                width: 60px;
+                height: 30px;
+            }
+            
+            .header h1 {
+                font-size: 1.8em;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <div class="header-left">
+                <div class="logo">
+                    <svg viewBox="0 0 2029 919" style="width: 100%; height: 100%; fill: white;">
+                        <g transform="matrix(1,0,0,1,-201,-198)">
+                            <path d="M1168.95,386.932C1237.67,502.99 1254.13,971.656 1221.96,1020.63C1189.77,1069.59 336.639,1116.89 277.999,1029.83C214.467,935.491 289.327,371.211 383.761,260.786C478.194,150.362 1136.25,331.694 1168.95,386.932ZM1078.01,445.901C1052.58,403.022 499.499,300.884 450.836,357.502C377.266,443.109 333.177,910.835 363.217,956.576C396.119,1006.7 1094.2,975.869 1119.22,937.853C1144.23,899.837 1131.43,536.002 1078.01,445.901Z" style="fill:white;stroke:white;stroke-width:1px;"/>
+                        </g>
+                        <g transform="matrix(1,0,0,1,-201,-198)">
+                            <path d="M1394.46,583.154C1354.11,583.154 1318.09,604.768 1298.64,641.153C1287.11,662.768 1281.7,687.624 1281.7,718.965C1281.7,755.71 1291.79,785.971 1311.96,808.666C1332.5,832.082 1359.16,843.249 1393.74,843.249C1422.2,843.249 1443.45,836.044 1463.27,819.833L1440.21,788.132C1438.41,789.573 1436.61,791.014 1435.17,792.095C1422.92,800.38 1411.03,804.343 1397.34,804.343C1375.73,804.343 1359.16,794.616 1349.07,776.244C1341.51,762.555 1338.62,743.462 1338.62,709.239C1338.62,680.059 1342.95,659.165 1352.67,644.755C1361.68,631.426 1378.25,623.141 1395.18,623.141C1409.23,623.141 1422.56,627.824 1435.17,637.19L1457.86,602.967C1444.17,591.079 1419.32,583.154 1394.46,583.154Z" style="fill:white;fill-rule:nonzero;"/>
+                        </g>
+                        <g transform="matrix(1,0,0,1,-201,-198)">
+                            <path d="M1486.32,625.663L1486.32,838.926L1535.31,838.926L1535.31,706.717C1546.12,696.991 1561.61,689.786 1573.5,689.786C1587.19,689.786 1592.23,696.63 1592.23,715.003L1592.23,838.926L1639.42,838.926L1639.42,709.959C1639.42,689.065 1638.34,686.183 1634.74,675.736C1628.98,660.246 1609.52,649.439 1586.83,649.439C1568.1,649.439 1547.2,657.364 1534.59,669.252C1534.59,667.09 1535.31,659.525 1535.31,653.761L1535.31,617.017C1535.31,599.365 1534.23,582.073 1532.07,571.986L1482.72,583.514C1484.88,591.079 1486.32,608.371 1486.32,625.663Z" style="fill:white;fill-rule:nonzero;"/>
+                        </g>
+                        <g transform="matrix(1,0,0,1,-201,-198)">
+                            <path d="M1672.93,747.425C1672.93,805.424 1705.71,842.889 1755.79,842.889C1784.25,842.889 1802.62,833.162 1816.67,817.312C1832.52,799.3 1839.72,777.685 1839.72,745.984C1839.72,716.083 1833.24,695.91 1818.47,678.618C1802.62,659.886 1782.08,650.88 1755.79,650.88C1706.07,650.88 1672.93,689.426 1672.93,747.425ZM1777.4,696.27C1783.88,704.556 1787.13,720.767 1787.13,745.623C1787.13,789.213 1778.12,807.945 1757.23,807.945C1747.86,807.945 1737.05,802.902 1732.73,792.815C1728.77,783.449 1726.61,767.598 1726.61,746.344C1726.61,727.972 1728.41,715.003 1731.65,705.276C1735.61,693.748 1744.98,686.544 1756.51,686.544C1765.15,686.544 1772.72,690.146 1777.4,696.27Z" style="fill:white;fill-rule:nonzero;"/>
+                        </g>
+                        <g transform="matrix(1,0,0,1,-201,-198)">
+                            <path d="M1981.65,657.364C1971.2,652.32 1958.24,649.078 1945.99,649.078C1930.5,649.078 1912.48,654.482 1900.24,662.768C1878.62,677.538 1862.41,705.636 1862.41,748.145C1862.41,807.945 1891.95,843.249 1942.74,843.249C1960.4,843.249 1974.81,839.287 1987.78,831.721C1994.26,827.759 1997.5,825.237 2004.71,818.032L1982.73,788.853L1979.85,791.374C1967.96,801.821 1957.87,806.504 1946.71,806.504C1938.42,806.504 1930.14,802.542 1925.09,796.057C1918.61,788.132 1915.73,773.722 1915.73,749.586C1915.73,706.357 1925.45,687.624 1947.07,687.624C1956.07,687.624 1966.52,693.028 1976.25,702.034L1999.66,670.333C1991.74,663.488 1988.5,660.966 1981.65,657.364Z" style="fill:white;fill-rule:nonzero;"/>
+                        </g>
+                        <g transform="matrix(1,0,0,1,-201,-198)">
+                            <path d="M2074.96,734.456L2136.92,838.926L2193.84,838.926L2121.43,731.574L2180.15,653.761L2122.15,653.761L2074.96,734.456ZM2025.61,631.066L2025.61,838.926L2073.88,838.926L2073.88,631.066C2073.88,606.57 2073.16,584.955 2071,571.266L2022.37,583.154C2025.25,602.247 2025.61,614.855 2025.61,631.066Z" style="fill:white;fill-rule:nonzero;"/>
+                        </g>
+                    </svg>
+                </div>
+                <div>
+                    <h1>AI Innovation Workshop</h1>
+                    <p>Reverse-Engineering Breakthrough Ideas</p>
+                </div>
+            </div>
+        </div>
+        
+        <div class="main-content">
+            <!-- Step 1: Team Setup -->
+            <div class="step active" id="step1">
+                <div class="step-header">
+                    <div class="step-number">1</div>
+                    <h2 class="step-title">Team Setup</h2>
+                    <p class="step-description">Let's start by setting up your team information</p>
+                </div>
+                
+                <div class="team-info">
+                    <div class="form-group">
+                        <label class="form-label" for="teamName">Team Name</label>
+                        <input type="text" class="form-input" id="teamName" placeholder="e.g., Innovation Explorers">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label" for="teamContext">Team Context (Optional)</label>
+                        <input type="text" class="form-input" id="teamContext" placeholder="e.g., Cross-functional innovation team, Strategic planning group">
+                    </div>
+                </div>
+                
+                <div class="buttons">
+                    <div></div>
+                    <button class="btn btn-primary" onclick="nextStep()">Choose Scenario →</button>
+                </div>
+            </div>
+            
+            <!-- Step 2: Scenario Selection -->
+            <div class="step" id="step2">
+                <div class="step-header">
+                    <div class="step-number">2</div>
+                    <h2 class="step-title">Choose Your Future</h2>
+                    <p class="step-description">Select the AI innovation scenario that most excites your team</p>
+                </div>
+                
+                <div class="scenario-grid" id="scenarioGrid">
+                    <!-- Scenarios will be populated by JavaScript -->
+                </div>
+                
+                <div class="buttons">
+                    <button class="btn btn-secondary" onclick="prevStep()">← Back</button>
+                    <button class="btn btn-primary" id="scenarioNext" onclick="nextStep()" disabled>Add Uncertainties →</button>
+                </div>
+            </div>
+            
+            <!-- Step 3: Add Uncertainties -->
+            <div class="step" id="step3">
+                <div class="step-header">
+                    <div class="step-number">3</div>
+                    <h2 class="step-title">Add Your Uncertainties</h2>
+                    <p class="step-description">What are your biggest concerns or unknowns about this scenario?</p>
+                </div>
+                
+                <div class="summary-section">
+                    <div class="summary-title">Selected Scenario:</div>
+                    <div id="selectedScenarioSummary"></div>
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label">Your Top 3 Uncertainties</label>
+                    <p style="color: #666; margin-bottom: 20px;">What could go wrong? What unknowns could change everything? What assumptions might be false?</p>
+                    
+                    <div class="uncertainty-list">
+                        <div class="uncertainty-item">
+                            <input type="text" class="uncertainty-input" placeholder="Uncertainty #1..." id="uncertainty1">
+                        </div>
+                        <div class="uncertainty-item">
+                            <input type="text" class="uncertainty-input" placeholder="Uncertainty #2..." id="uncertainty2">
+                        </div>
+                        <div class="uncertainty-item">
+                            <input type="text" class="uncertainty-input" placeholder="Uncertainty #3..." id="uncertainty3">
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="buttons">
+                    <button class="btn btn-secondary" onclick="prevStep()">← Back</button>
+                    <button class="btn btn-primary" onclick="nextStep()">Create Goal →</button>
+                </div>
+            </div>
+            
+            <!-- Step 4: LADDER Goal Creation -->
+            <div class="step" id="step4">
+                <div class="step-header">
+                    <div class="step-number">4</div>
+                    <h2 class="step-title">Craft Your Audacious Goal</h2>
+                    <p class="step-description">Use the LADDER framework to create a specific, breakthrough goal</p>
+                </div>
+                
+                <div class="ladder-section">
+                    <div class="ladder-field">
+                        <div class="ladder-label">
+                            <span class="ladder-letter">L</span>
+                            LEAD - Your Breakthrough Goal
+                            <button class="copy-template-btn" onclick="copyTemplate('lead')">📋 Copy Template</button>
+                        </div>
+                        <div class="ladder-hint">Format: "By December 2027, [specific organization/sector] will achieve [measurable outcome] resulting in [impact] through [AI capability]"</div>
+                        <div class="template-text" id="leadTemplate">
+                            <strong>Template:</strong><br>
+                            By December 2027, [specific organization/sector] will achieve [measurable outcome] resulting in [impact] through [AI capability]
+                        </div>
+                        <textarea class="form-textarea" id="lead" placeholder="Customize the template above for your breakthrough goal..."></textarea>
+                    </div>
+                    
+                    <div class="ladder-field">
+                        <div class="ladder-label">
+                            <span class="ladder-letter">A</span>
+                            ANCHOR - Current Reality & Data
+                            <button class="copy-template-btn" onclick="copyTemplate('anchor')">📋 Copy Template</button>
+                        </div>
+                        <div class="ladder-hint">Include specific metrics, costs, time delays, error rates, and market data that ground your goal in reality</div>
+                        <div class="template-text" id="anchorTemplate">
+                            <strong>Template:</strong><br>
+                            Current state: [Current metrics], costs [specific amounts], time delays [specific durations], error rates [percentages], market data [relevant statistics]. Recent studies show [specific findings]. Industry benchmarks indicate [comparison data].
+                        </div>
+                        <textarea class="form-textarea" id="anchor" placeholder="Customize the template above with your specific data..."></textarea>
+                    </div>
+                    
+                    <div class="ladder-field">
+                        <div class="ladder-label">
+                            <span class="ladder-letter">D</span>
+                            DETAIL - Your Strategic Reasoning
+                            <button class="copy-template-btn" onclick="copyTemplate('detail')">📋 Copy Template</button>
+                        </div>
+                        <div class="ladder-hint">Explain WHY this breakthrough is possible now, what technology trends enable it, and why 2027 is the right timeline</div>
+                        <div class="template-text" id="detailTemplate">
+                            <strong>Template:</strong><br>
+                            Reasoning: AI can [specific capability], recent advances show [specific results], infrastructure supports [specific requirements], competitive pressure demands [specific changes]. Technology readiness: [maturity level]. Market timing: [why now]. Strategic advantage: [competitive benefit].
+                        </div>
+                        <textarea class="form-textarea" id="detail" placeholder="Customize the template above with your reasoning..."></textarea>
+                    </div>
+                    
+                    <div class="ladder-field">
+                        <div class="ladder-label">
+                            <span class="ladder-letter">D</span>
+                            DECLARE - Critical Assumptions
+                            <button class="copy-template-btn" onclick="copyTemplate('declare')">📋 Copy Template</button>
+                        </div>
+                        <div class="ladder-hint">List what MUST be true for success: technology capabilities, market acceptance, regulatory environment, organizational readiness, competitive response</div>
+                        <div class="template-text" id="declareTemplate">
+                            <strong>Template:</strong><br>
+                            Critical assumptions: AI accuracy reaches [X]%, regulatory approval for [specific process], customer acceptance of [AI application], staff successfully retrain for AI collaboration, data quality improves to support AI, competitors don't block innovation through [specific concern]
+                        </div>
+                        <textarea class="form-textarea" id="declare" placeholder="Customize the template above for your critical assumptions..."></textarea>
+                    </div>
+                    
+                    <div class="ladder-field">
+                        <div class="ladder-label">
+                            <span class="ladder-letter">E</span>
+                            EXPLAIN - Analysis Needed
+                            <button class="copy-template-btn" onclick="copyTemplate('explain')">📋 Copy Template</button>
+                        </div>
+                        <div class="ladder-hint">What specific help do you need to validate this goal and identify the pathway from today to breakthrough success?</div>
+                        <div class="template-text" id="explainTemplate">
+                            <strong>Template:</strong><br>
+                            Need analysis of: technical feasibility gaps, implementation timeline with milestones, change management requirements, competitive advantage sustainability, risk mitigation strategies, resource requirements, regulatory considerations, market readiness indicators.
+                        </div>
+                        <textarea class="form-textarea" id="explain" placeholder="Customize the template above for your analysis needs..."></textarea>
+                    </div>
+                    
+                    <div class="ladder-field">
+                        <div class="ladder-label">
+                            <span class="ladder-letter">R</span>
+                            REQUEST - Innovation Roadmap
+                            <button class="copy-template-btn" onclick="copyTemplate('request')">📋 Copy Template</button>
+                        </div>
+                        <div class="ladder-hint">Ask for specific deliverables that will help you move from goal to business opportunities with timelines and success metrics</div>
+                        <div class="template-text" id="requestTemplate">
+                            <strong>Template:</strong><br>
+                            Please provide: (1) 18-month implementation roadmap with quarterly milestones, (2) Risk assessment with mitigation strategies, (3) Success metrics and validation checkpoints, (4) Required capabilities and partnerships, (5) Competitive advantage analysis, (6) Business model implications and opportunities
+                        </div>
+                        <textarea class="form-textarea" id="request" placeholder="Customize the template above for your specific goal..."></textarea>
+                    </div>
+                </div>
+                
+                <div class="buttons">
+                    <button class="btn btn-secondary" onclick="prevStep()">← Back</button>
+                    <button class="btn btn-primary" onclick="nextStep()">Generate Prompt →</button>
+                </div>
+            </div>
+            
+            <!-- Step 5: Generated Prompt & Copy -->
+            <div class="step" id="step5">
+                <div class="step-header">
+                    <div class="step-number">5</div>
+                    <h2 class="step-title">Copy Your LADDER Prompt</h2>
+                    <p class="step-description">Copy this prompt and paste it into your preferred AI tool (Claude, ChatGPT, etc.)</p>
+                </div>
+                
+                <div class="ai-response">
+                    <div class="ai-response-header">
+                        <div class="ai-icon">📋</div>
+                        <strong>Generated LADDER Prompt</strong>
+                        <button class="btn btn-secondary" onclick="copyPrompt('goalPrompt')" style="margin-left: auto;">📋 Copy Prompt</button>
+                    </div>
+                    <div class="prompt-output" id="goalPrompt">
+                        <!-- Prompt will be generated here -->
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label">Paste AI Response Here:</label>
+                    <textarea class="form-textarea" id="goalAIResponse" placeholder="After copying the prompt above to your AI tool, paste the response here..." style="min-height: 200px;"></textarea>
+                </div>
+                
+                <div class="buttons">
+                    <button class="btn btn-secondary" onclick="prevStep()">← Refine Goal</button>
+                    <button class="btn btn-primary" onclick="nextStep()" id="goalResponseNext" disabled>Complete Workshop →</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Global state
+        let currentStep = 1;
+        let totalSteps = 5;
+        let selectedScenario = null;
+        let workshopData = {};
+        
+        // Industry-Agnostic scenarios
+        let scenarios = {
+            1: {
+                title: "🎯 AI-Powered Decision Acceleration",
+                description: "By 2027, Norwegian organizations reduce critical decision-making time by 90% through AI-powered analysis, enabling breakthrough speed in approvals, diagnoses, strategic choices, and resource allocation.",
+                impact: "Impact: 10x faster organizational responses + 60% better decision quality",
+                anchor: "Current decision-making in Norway averages 3-8 weeks for critical choices, with 35% requiring multiple revisions. AI pilots show 85% time reduction in analysis phases. Norwegian organizations spend NOK 150B annually on decision-related delays and rework."
+            },
+            2: {
+                title: "♻️ AI-Optimized Resource Management",
+                description: "By 2027, Norway achieves 70% resource efficiency gains through AI optimization across energy, materials, workforce, and capital allocation, becoming the world's most efficient resource utilization economy.",
+                impact: "Impact: 70% efficiency gains + NOK 200B in savings annually",
+                anchor: "Norway currently wastes 40% of allocated resources across sectors due to poor optimization. Energy grid inefficiencies cost NOK 25B annually, workforce misallocation costs NOK 80B, material waste costs NOK 45B. AI optimization pilots show 60-80% efficiency improvements."
+            },
+            3: {
+                title: "🤝 AI-Enhanced Human Collaboration",
+                description: "By 2027, Norwegian knowledge workers achieve 10x productivity gains through AI that amplifies human creativity, automates routine tasks, and enables seamless cross-functional collaboration at unprecedented scale.",
+                impact: "Impact: 10x knowledge worker productivity + 50% faster innovation cycles",
+                anchor: "Norwegian knowledge workers spend 60% of time on routine tasks, 25% on coordination, leaving only 15% for creative work. Average project cycle time is 18 months. AI collaboration tools in pilots show 8x productivity gains and 70% faster project completion."
+            },
+            4: {
+                title: "🔮 AI-Predictive Operations",
+                description: "By 2027, Norwegian organizations prevent 80% of system failures, delays, and disruptions through AI that predicts and prevents problems before they occur across all operational domains.",
+                impact: "Impact: 80% failure prevention + NOK 300B in avoided costs annually",
+                anchor: "System failures currently cost Norwegian organizations NOK 400B annually in downtime, delays, and emergency responses. Predictive maintenance pilots show 75-85% failure prevention rates. Average system downtime costs NOK 2M per hour across sectors."
+            }
+        };
+        
+        // Initialize
+        renderScenarios();
+        updateProgress();
+        
+        function renderScenarios() {
+            const grid = document.getElementById('scenarioGrid');
+            grid.innerHTML = '';
+            
+            Object.keys(scenarios).forEach(key => {
+                const scenario = scenarios[key];
+                const div = document.createElement('div');
+                div.className = 'scenario-card';
+                div.onclick = () => selectScenario(key);
+                div.innerHTML = `
+                    <div class="scenario-title">${scenario.title}</div>
+                    <div class="scenario-description">${scenario.description}</div>
+                    <div class="scenario-impact">${scenario.impact}</div>
+                `;
+                grid.appendChild(div);
+            });
+        }
+        
+        function selectScenario(id) {
+            document.querySelectorAll('.scenario-card').forEach(card => {
+                card.classList.remove('selected');
+            });
+            
+            event.target.closest('.scenario-card').classList.add('selected');
+            
+            selectedScenario = id;
+            workshopData.scenario = scenarios[id];
+            
+            document.getElementById('scenarioNext').disabled = false;
+        }
+        
+        function nextStep() {
+            if (!validateCurrentStep()) {
+                return;
+            }
+            
+            saveCurrentStepData();
+            
+            if (currentStep < totalSteps) {
+                document.getElementById(`step${currentStep}`).classList.remove('active');
+                currentStep++;
+                document.getElementById(`step${currentStep}`).classList.add('active');
+                prepareCurrentStep();
+                updateProgress();
+            }
+        }
+        
+        function prevStep() {
+            if (currentStep > 1) {
+                document.getElementById(`step${currentStep}`).classList.remove('active');
+                currentStep--;
+                document.getElementById(`step${currentStep}`).classList.add('active');
+                updateProgress();
+            }
+        }
+        
+        function validateCurrentStep() {
+            switch(currentStep) {
+                case 1:
+                    const teamName = document.getElementById('teamName').value.trim();
+                    if (!teamName) {
+                        alert('Please fill in your team name.');
+                        return false;
+                    }
+                    return true;
+                    
+                case 2:
+                    if (!selectedScenario) {
+                        alert('Please select a scenario.');
+                        return false;
+                    }
+                    return true;
+                    
+                case 4:
+                    const ladderFields = ['lead', 'anchor', 'detail', 'declare', 'explain', 'request'];
+                    for (let field of ladderFields) {
+                        if (!document.getElementById(field).value.trim()) {
+                            alert(`Please fill in the ${field.toUpperCase()} field.`);
+                            return false;
+                        }
+                    }
+                    return true;
+                    
+                case 5:
+                    const goalResponse = document.getElementById('goalAIResponse');
+                    if (!goalResponse || goalResponse.value.trim().length < 50) {
+                        alert('Please paste a substantial AI response (at least 50 characters).');
+                        return false;
+                    }
+                    return true;
+                    
+                default:
+                    return true;
+            }
+        }
+        
+        function saveCurrentStepData() {
+            switch(currentStep) {
+                case 1:
+                    workshopData.teamName = document.getElementById('teamName').value;
+                    workshopData.teamContext = document.getElementById('teamContext').value;
+                    break;
+                    
+                case 3:
+                    workshopData.uncertainties = [
+                        document.getElementById('uncertainty1').value,
+                        document.getElementById('uncertainty2').value,
+                        document.getElementById('uncertainty3').value
+                    ].filter(u => u.trim() !== '');
+                    break;
+                    
+                case 4:
+                    workshopData.goalLadder = {
+                        lead: document.getElementById('lead').value,
+                        anchor: document.getElementById('anchor').value,
+                        detail: document.getElementById('detail').value,
+                        declare: document.getElementById('declare').value,
+                        explain: document.getElementById('explain').value,
+                        request: document.getElementById('request').value
+                    };
+                    break;
+                    
+                case 5:
+                    workshopData.goalAIResponse = document.getElementById('goalAIResponse').value;
+                    break;
+            }
+        }
+        
+        function prepareCurrentStep() {
+            switch(currentStep) {
+                case 3:
+                    if (workshopData.scenario) {
+                        document.getElementById('selectedScenarioSummary').innerHTML = `
+                            <strong>${workshopData.scenario.title}</strong><br>
+                            ${workshopData.scenario.description}
+                        `;
+                    }
+                    break;
+                    
+                case 4:
+                    if (workshopData.scenario && !document.getElementById('anchor').value) {
+                        document.getElementById('anchor').value = workshopData.scenario.anchor;
+                    }
+                    break;
+                    
+                case 5:
+                    if (workshopData.goalLadder) {
+                        const prompt = generateLadderPrompt(workshopData.goalLadder, 'goal');
+                        document.getElementById('goalPrompt').textContent = prompt;
+                    }
+                    break;
+            }
+        }
+        
+        function generateLadderPrompt(ladderData, type) {
+            return `TEAM: ${workshopData.teamName || 'Innovation Team'}
+CONTEXT: ${workshopData.teamContext || 'Strategic Innovation Workshop'}
+SCENARIO: ${workshopData.scenario?.title || 'Not specified'}
+FOCUS: Reverse-Engineering ${type.toUpperCase()} for Business Innovation
+
+LEAD: ${ladderData.lead}
+
+ANCHOR: ${ladderData.anchor}
+
+DETAIL: ${ladderData.detail}
+
+DECLARE: ${ladderData.declare}
+
+EXPLAIN: ${ladderData.explain}
+
+REQUEST: ${ladderData.request}
+
+IMPORTANT: This is for developing concrete business opportunities with implementation timelines, not theoretical analysis. Focus on actionable insights that can lead to new ventures, products, or services with clear revenue models and 30-day validation tests.
+
+---
+Generated by AI Innovation Workshop Tool | Chock`;
+        }
+        
+        function copyTemplate(fieldType) {
+            try {
+                let templateText = '';
+                
+                switch(fieldType) {
+                    case 'lead':
+                        templateText = `By December 2027, [specific organization/sector] will achieve [measurable outcome] resulting in [impact] through [AI capability]`;
+                        break;
+                    case 'anchor':
+                        templateText = `Current state: [Current metrics], costs [specific amounts], time delays [specific durations], error rates [percentages], market data [relevant statistics]. Recent studies show [specific findings]. Industry benchmarks indicate [comparison data].`;
+                        break;
+                    case 'detail':
+                        templateText = `Reasoning: AI can [specific capability], recent advances show [specific results], infrastructure supports [specific requirements], competitive pressure demands [specific changes]. Technology readiness: [maturity level]. Market timing: [why now]. Strategic advantage: [competitive benefit].`;
+                        break;
+                    case 'declare':
+                        templateText = `Critical assumptions: AI accuracy reaches [X]%, regulatory approval for [specific process], customer acceptance of [AI application], staff successfully retrain for AI collaboration, data quality improves to support AI, competitors don't block innovation through [specific concern]`;
+                        break;
+                    case 'explain':
+                        templateText = `Need analysis of: technical feasibility gaps, implementation timeline with milestones, change management requirements, competitive advantage sustainability, risk mitigation strategies, resource requirements, regulatory considerations, market readiness indicators.`;
+                        break;
+                    case 'request':
+                        templateText = `Please provide: (1) 18-month implementation roadmap with quarterly milestones, (2) Risk assessment with mitigation strategies, (3) Success metrics and validation checkpoints, (4) Required capabilities and partnerships, (5) Competitive advantage analysis, (6) Business model implications and opportunities`;
+                        break;
+                    default:
+                        console.log('Unknown field type:', fieldType);
+                        return;
+                }
+                
+                // Try clipboard first
+                if (navigator.clipboard && navigator.clipboard.writeText) {
+                    navigator.clipboard.writeText(templateText).then(() => {
+                        showCopySuccess(event.target);
+                        populateFieldIfEmpty(fieldType, templateText);
+                    }).catch(err => {
+                        console.log('Clipboard failed, using fallback:', err);
+                        fallbackCopy(fieldType, templateText);
+                    });
+                } else {
+                    fallbackCopy(fieldType, templateText);
+                }
+            } catch (error) {
+                console.log('Copy template error:', error);
+                fallbackCopy(fieldType, templateText);
+            }
+        }
+        
+        function fallbackCopy(fieldType, templateText) {
+            // Fallback: populate the field directly
+            const field = document.getElementById(fieldType);
+            if (field) {
+                field.value = templateText;
+                showCopySuccess(event.target, 'Template added to field!');
+            } else {
+                alert('Template: ' + templateText);
+            }
+        }
+        
+        function showCopySuccess(button, message = '✅ Copied!') {
+            const originalText = button.textContent;
+            button.textContent = message;
+            button.style.background = '#4caf50';
+            setTimeout(() => {
+                button.textContent = originalText;
+                button.style.background = '#666666';
+            }, 2000);
+        }
+        
+        function populateFieldIfEmpty(fieldType, templateText) {
+            const field = document.getElementById(fieldType);
+            if (field && !field.value.trim()) {
+                field.value = templateText;
+            }
+        }
+        
+        function copyPrompt(elementId) {
+            try {
+                const element = document.getElementById(elementId);
+                if (!element) {
+                    alert('Prompt not found. Please generate the prompt first.');
+                    return;
+                }
+                
+                const text = element.textContent;
+                if (!text || text.trim() === '') {
+                    alert('No prompt text available. Please complete the LADDER fields first.');
+                    return;
+                }
+                
+                if (navigator.clipboard && navigator.clipboard.writeText) {
+                    navigator.clipboard.writeText(text).then(() => {
+                        showCopySuccess(event.target);
+                    }).catch(err => {
+                        console.log('Clipboard failed:', err);
+                        fallbackPromptCopy(text);
+                    });
+                } else {
+                    fallbackPromptCopy(text);
+                }
+            } catch (error) {
+                console.log('Copy prompt error:', error);
+                alert('Please select and copy the prompt text manually (Ctrl+C or Cmd+C)');
+            }
+        }
+        
+        function fallbackPromptCopy(text) {
+            // Create a temporary textarea to select text
+            const textarea = document.createElement('textarea');
+            textarea.value = text;
+            document.body.appendChild(textarea);
+            textarea.select();
+            
+            try {
+                document.execCommand('copy');
+                showCopySuccess(event.target);
+            } catch (err) {
+                alert('Please copy the prompt text manually (Ctrl+C or Cmd+C)');
+            }
+            
+            document.body.removeChild(textarea);
+        }
+        
+        function updateProgress() {
+            const progressElement = document.getElementById('progressFill');
+            if (progressElement) {
+                const progress = (currentStep / totalSteps) * 100;
+                progressElement.style.width = progress + '%';
+            }
+        }
+        
+        // Safe event listener setup
+        function setupEventListeners() {
+            try {
+                const goalAIResponse = document.getElementById('goalAIResponse');
+                if (goalAIResponse) {
+                    goalAIResponse.addEventListener('input', function() {
+                        const nextButton = document.getElementById('goalResponseNext');
+                        if (nextButton) {
+                            nextButton.disabled = this.value.trim().length < 50;
+                        }
+                    });
+                }
+            } catch (error) {
+                console.log('Event listener setup error:', error);
+            }
+        }
+        
+        // Initialize when DOM is ready
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', setupEventListeners);
+        } else {
+            setupEventListeners();
+        }
+    </script>
+</body>
+</html>
