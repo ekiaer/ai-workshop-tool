@@ -81,9 +81,24 @@
         .progress-fill {
             height: 100%;
             background: #fff;
-            width: 20%;
+            width: 10%;
             transition: width 0.5s ease;
             border-radius: 4px;
+        }
+        
+        .phase-indicator {
+            background: #f5f5f5;
+            padding: 15px 40px;
+            border-bottom: 2px solid #e0e0e0;
+            text-align: center;
+            font-family: 'PT Sans Narrow', sans-serif;
+            font-size: 1.1em;
+            color: #666;
+        }
+        
+        .phase-indicator.active {
+            background: #000000;
+            color: white;
         }
         
         .main-content {
@@ -136,38 +151,19 @@
             margin: 0 auto;
         }
         
-        .scenario-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 20px;
-            margin: 30px 0;
-        }
-        
-        .scenario-card {
+        .scenario-probability {
+            background: #f8f9fa;
             border: 2px solid #e0e0e0;
             border-radius: 12px;
             padding: 25px;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            background: #f8f9fa;
-        }
-        
-        .scenario-card:hover {
-            border-color: #000000;
-            transform: translateY(-5px);
-            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
-        }
-        
-        .scenario-card.selected {
-            border-color: #000000;
-            background: #f0f0f0;
+            margin-bottom: 20px;
         }
         
         .scenario-title {
             font-size: 1.3em;
             font-weight: bold;
             color: #000000;
-            margin-bottom: 15px;
+            margin-bottom: 10px;
         }
         
         .scenario-description {
@@ -175,10 +171,60 @@
             margin-bottom: 15px;
         }
         
-        .scenario-impact {
-            font-size: 0.9em;
-            color: #333;
-            font-weight: 600;
+        .probability-control {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        
+        .probability-slider {
+            flex: 1;
+            height: 8px;
+            -webkit-appearance: none;
+            appearance: none;
+            background: #e0e0e0;
+            border-radius: 4px;
+            outline: none;
+        }
+        
+        .probability-slider::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 20px;
+            height: 20px;
+            background: #000000;
+            border-radius: 50%;
+            cursor: pointer;
+        }
+        
+        .probability-value {
+            min-width: 60px;
+            font-size: 1.2em;
+            font-weight: bold;
+            text-align: right;
+        }
+        
+        .total-probability {
+            background: #fff;
+            border: 3px solid #e0e0e0;
+            border-radius: 12px;
+            padding: 20px;
+            text-align: center;
+            font-size: 1.3em;
+            font-weight: bold;
+            margin-top: 20px;
+        }
+        
+        .total-probability.valid {
+            background: #f0f8f0;
+            border-color: #4caf50;
+            color: #2e7d32;
+        }
+        
+        .total-probability.invalid {
+            background: #ffebee;
+            border-color: #f44336;
+            color: #c62828;
         }
         
         .form-group {
@@ -241,6 +287,13 @@
             border-bottom: 2px solid #000000;
         }
         
+        .ladder-section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
         .ladder-section {
             background: #f8f9fa;
             border-radius: 12px;
@@ -272,34 +325,8 @@
             margin-bottom: 10px;
             display: flex;
             align-items: center;
-            justify-content: space-between;
             font-family: 'PT Sans Narrow', sans-serif;
             font-size: 1.3em;
-        }
-        
-        .copy-template-btn {
-            padding: 5px 10px !important;
-            font-size: 12px !important;
-            margin-left: auto;
-            background: #666666;
-            color: white;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-        }
-        
-        .template-text {
-            background: #f0f0f0;
-            border: 1px solid #d0d0d0;
-            border-radius: 6px;
-            padding: 12px;
-            margin-bottom: 10px;
-            font-size: 14px;
-            line-height: 1.4;
-        }
-        
-        .template-text strong {
-            color: #000000;
         }
         
         .ladder-hint {
@@ -326,7 +353,10 @@
             cursor: pointer;
             transition: all 0.3s ease;
             text-decoration: none;
-            display: inline-block;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
             text-align: center;
             font-family: 'PT Sans Narrow', sans-serif;
         }
@@ -345,6 +375,11 @@
             color: white;
         }
         
+        .btn-gemini {
+            background: linear-gradient(90deg, #4285F4, #9B72CB, #D96570, #F2A600);
+            color: white;
+        }
+
         .btn:disabled {
             opacity: 0.5;
             cursor: not-allowed;
@@ -362,6 +397,12 @@
             display: flex;
             align-items: center;
             margin-bottom: 15px;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .ai-response-header strong {
+            margin-right: auto;
         }
         
         .ai-icon {
@@ -406,14 +447,6 @@
             font-family: 'PT Sans Narrow', sans-serif;
         }
         
-        .team-info {
-            background: #f5f5f5;
-            border: 2px solid #e0e0e0;
-            border-radius: 8px;
-            padding: 20px;
-            margin-bottom: 30px;
-        }
-        
         .export-buttons {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
@@ -421,16 +454,173 @@
             margin: 30px 0;
         }
         
-        .methodology-guide {
-            background: #f0f0f0;
-            border-radius: 12px;
-            padding: 25px;
-            margin: 20px 0;
-            display: none;
+        .settings-btn {
+            background: transparent;
+            border: 2px solid white;
+            color: white;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 20px;
+            transition: all 0.3s ease;
         }
         
-        .methodology-guide.show {
+        .settings-btn:hover {
+            background: white;
+            color: black;
+        }
+        
+        .settings-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.8);
+            z-index: 1000;
+            overflow-y: auto;
+        }
+        
+        .settings-content {
+            background: white;
+            max-width: 900px;
+            margin: 50px auto;
+            padding: 40px;
+            border-radius: 12px;
+            position: relative;
+        }
+        
+        .settings-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+        }
+        
+        .settings-header h2 {
+            font-family: 'PT Sans Narrow', sans-serif;
+            font-size: 2em;
+            margin: 0;
+        }
+        
+        .close-btn {
+            background: none;
+            border: none;
+            font-size: 30px;
+            cursor: pointer;
+            color: #666;
+        }
+        
+        .close-btn:hover {
+            color: #000;
+        }
+        
+        .scenario-editor {
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 20px;
+            background: #f8f9fa;
+            position: relative;
+        }
+        
+        .scenario-editor h4 {
+            margin-top: 0;
+            margin-bottom: 15px;
+        }
+        
+        .editor-field {
+            margin-bottom: 15px;
+        }
+        
+        .editor-field label {
             display: block;
+            font-weight: 600;
+            margin-bottom: 5px;
+            font-size: 0.9em;
+            color: #666;
+        }
+        
+        .editor-field input, .editor-field textarea {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 14px;
+        }
+        
+        .editor-field textarea {
+            min-height: 80px;
+            resize: vertical;
+        }
+
+        .remove-scenario-btn {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            background: #e74c3c;
+            color: white;
+            border: none;
+            width: 25px;
+            height: 25px;
+            border-radius: 50%;
+            cursor: pointer;
+            font-weight: bold;
+        }
+        .remove-scenario-btn:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+        }
+        
+        .settings-actions {
+            display: flex;
+            gap: 10px;
+            justify-content: space-between;
+            margin-top: 30px;
+            align-items: center;
+        }
+        
+        .save-settings-btn {
+            background: #000;
+            color: white;
+            padding: 12px 30px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+        }
+        
+        .save-settings-btn:hover {
+            opacity: 0.8;
+        }
+        
+        .context-info {
+            background: #f0f8ff;
+            border: 1px solid #4682b4;
+            border-radius: 8px;
+            padding: 15px;
+            margin-bottom: 20px;
+        }
+        
+        .context-info h4 {
+            margin: 0 0 10px 0;
+            color: #4682b4;
+        }
+
+        .spinner {
+            display: inline-block;
+            width: 16px;
+            height: 16px;
+            border: 2px solid rgba(255,255,255,0.3);
+            border-radius: 50%;
+            border-top-color: #fff;
+            animation: spin 1s ease-in-out infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
         }
         
         @media (max-width: 768px) {
@@ -438,7 +628,7 @@
                 padding: 20px;
             }
             
-            .scenario-grid {
+            .uncertainty-list {
                 grid-template-columns: 1fr;
             }
             
@@ -463,6 +653,15 @@
             
             .header h1 {
                 font-size: 1.8em;
+            }
+            
+            .settings-modal {
+                padding: 20px;
+            }
+            
+            .settings-content {
+                margin: 20px;
+                padding: 20px;
             }
         }
     </style>
@@ -495,7 +694,38 @@
                 </div>
                 <div>
                     <h1>AI Innovation Workshop</h1>
-                    <p>Reverse-Engineering Breakthrough Ideas</p>
+                    <p>Probabilistic Future Planning & LADDER Analysis</p>
+                </div>
+            </div>
+            <div style="display: flex; align-items: center; gap: 15px;">
+                 <button id="settingsBtn" class="settings-btn" title="Workshop Scenario Setup">⚙️</button>
+            </div>
+        </div>
+        
+        <div class="phase-indicator active" id="phaseIndicator">
+            Phase 1: Probabilistic Future Synthesis
+        </div>
+        
+        <!-- Settings Modal -->
+        <div class="settings-modal" id="settingsModal">
+            <div class="settings-content">
+                <div class="settings-header">
+                    <h2>Workshop Scenario Setup</h2>
+                    <button id="closeSettingsBtn" class="close-btn">×</button>
+                </div>
+                
+                <div class="context-info">
+                    <h4>📝 Admin: Define 10-Year Scenarios</h4>
+                    <p>Input 4-6 foundational scenarios. Participants will use these to build a 2-year (2027) future.</p>
+                </div>
+                
+                <div id="scenarioEditors">
+                    <!-- Scenario editors will be populated here by JavaScript -->
+                </div>
+                
+                <div class="settings-actions">
+                    <button class="btn btn-secondary" id="addScenarioBtn">+ Add Scenario</button>
+                    <button class="save-settings-btn" id="saveSettingsBtn">Save & Apply Scenarios</button>
                 </div>
             </div>
         </div>
@@ -509,83 +739,128 @@
                     <p class="step-description">Let's start by setting up your team information</p>
                 </div>
                 
-                <div class="team-info">
-                    <div class="form-group">
-                        <label class="form-label" for="teamName">Team Name</label>
-                        <input type="text" class="form-input" id="teamName" placeholder="e.g., Innovation Explorers">
-                    </div>
-                    <div class="form-group">
-                        <label class="form-label" for="teamContext">Team Context (Optional)</label>
-                        <input type="text" class="form-input" id="teamContext" placeholder="e.g., Cross-functional innovation team, Strategic planning group">
-                    </div>
+                <div class="form-group">
+                    <label class="form-label" for="teamName">Team Name</label>
+                    <input type="text" class="form-input" id="teamName" placeholder="e.g., Innovation Explorers">
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label" for="teamContext">Team Context (Optional)</label>
+                    <input type="text" class="form-input" id="teamContext" placeholder="e.g., Cross-functional innovation team, Strategic planning group">
                 </div>
                 
                 <div class="buttons">
                     <div></div>
-                    <button class="btn btn-primary" onclick="nextStep()">Choose Scenario →</button>
+                    <button class="btn btn-primary" id="step1Next">Begin Scenario Planning →</button>
                 </div>
             </div>
             
-            <!-- Step 2: Scenario Selection -->
+            <!-- Step 2: Probability Assignment -->
             <div class="step" id="step2">
                 <div class="step-header">
                     <div class="step-number">2</div>
-                    <h2 class="step-title">Choose Your Future</h2>
-                    <p class="step-description">Select the AI innovation scenario that most excites your team</p>
+                    <h2 class="step-title">Assign Scenario Probabilities</h2>
+                    <p class="step-description">What's the likelihood of each 10-year scenario by 2035? Distribute 100% across all scenarios.</p>
+                </div>
+
+                <div id="scenario-probability-container">
+                    <!-- Scenarios from settings will be populated here -->
                 </div>
                 
-                <div class="scenario-grid" id="scenarioGrid">
-                    <!-- Scenarios will be populated by JavaScript -->
+                <div class="total-probability" id="totalProbability">
+                    Total: <span id="totalValue">100%</span>
                 </div>
                 
                 <div class="buttons">
-                    <button class="btn btn-secondary" onclick="prevStep()">← Back</button>
-                    <button class="btn btn-primary" id="scenarioNext" onclick="nextStep()" disabled>Add Uncertainties →</button>
+                    <button class="btn btn-secondary" id="step2Prev">← Back</button>
+                    <button class="btn btn-primary" id="step2Next">Add Context & Uncertainties →</button>
                 </div>
             </div>
             
-            <!-- Step 3: Add Uncertainties -->
+            <!-- Step 3: Uncertainties & Context -->
             <div class="step" id="step3">
                 <div class="step-header">
                     <div class="step-number">3</div>
-                    <h2 class="step-title">Add Your Uncertainties</h2>
-                    <p class="step-description">What are your biggest concerns or unknowns about this scenario?</p>
+                    <h2 class="step-title">Add Context & Uncertainties</h2>
+                    <p class="step-description">What uncertainties could affect these scenarios? How do they apply to your industry?</p>
                 </div>
                 
                 <div class="summary-section">
-                    <div class="summary-title">Selected Scenario:</div>
-                    <div id="selectedScenarioSummary"></div>
+                    <div class="summary-title">Your Probability Distribution:</div>
+                    <div id="probabilitySummary"></div>
                 </div>
                 
                 <div class="form-group">
                     <label class="form-label">Your Top 3 Uncertainties</label>
-                    <p style="color: #666; margin-bottom: 20px;">What could go wrong? What unknowns could change everything? What assumptions might be false?</p>
+                    <p style="color: #666; margin-bottom: 20px;">What could accelerate or derail these scenarios? What wild cards might emerge?</p>
                     
                     <div class="uncertainty-list">
                         <div class="uncertainty-item">
-                            <input type="text" class="uncertainty-input" placeholder="Uncertainty #1..." id="uncertainty1">
+                            <input type="text" class="uncertainty-input" placeholder="e.g., Regulatory restrictions on AI decision-making" id="uncertainty1">
                         </div>
                         <div class="uncertainty-item">
-                            <input type="text" class="uncertainty-input" placeholder="Uncertainty #2..." id="uncertainty2">
+                            <input type="text" class="uncertainty-input" placeholder="e.g., Workforce resistance to AI collaboration" id="uncertainty2">
                         </div>
                         <div class="uncertainty-item">
-                            <input type="text" class="uncertainty-input" placeholder="Uncertainty #3..." id="uncertainty3">
+                            <input type="text" class="uncertainty-input" placeholder="e.g., Cybersecurity threats to predictive systems" id="uncertainty3">
                         </div>
                     </div>
                 </div>
                 
+                <div class="form-group">
+                    <label class="form-label" for="industryContext">Your Business/Industry Context</label>
+                    <p style="color: #666; margin-bottom: 10px;">How would these scenarios specifically manifest in your industry? What unique factors apply?</p>
+                    <textarea class="form-textarea" id="industryContext" placeholder="e.g., In healthcare, AI decision acceleration would transform diagnosis and treatment planning..."></textarea>
+                </div>
+                
                 <div class="buttons">
-                    <button class="btn btn-secondary" onclick="prevStep()">← Back</button>
-                    <button class="btn btn-primary" onclick="nextStep()">Create Goal →</button>
+                    <button class="btn btn-secondary" id="step3Prev">← Back</button>
+                    <button class="btn btn-primary" id="step3Next">Synthesize 2027 Future →</button>
                 </div>
             </div>
             
-            <!-- Step 4: LADDER Goal Creation -->
+            <!-- Step 4: Synthesized Future -->
             <div class="step" id="step4">
                 <div class="step-header">
                     <div class="step-number">4</div>
-                    <h2 class="step-title">Craft Your Audacious Goal</h2>
-                    <p class="step-description">Use the LADDER framework to create a specific, breakthrough goal</p>
+                    <h2 class="step-title">Your Synthesized 2027 Future</h2>
+                    <p class="step-description">Based on your probabilities and context, generate your unique 2-year future scenario.</p>
+                </div>
+                
+                <div class="ai-response">
+                    <div class="ai-response-header">
+                        <div class="ai-icon">🤖</div>
+                        <strong>Generate Your Probabilistic Future</strong>
+                        <button class="btn btn-secondary" id="generateFutureBtn" style="margin-left: auto;">Generate Synthesis Prompt</button>
+                    </div>
+                    <div class="prompt-output" id="synthesisPrompt" style="display: none;">
+                        <!-- Synthesis prompt will appear here -->
+                    </div>
+                    <button class="btn btn-secondary" id="copySynthesisBtn" style="display: none; margin-top: 10px;">📋 Copy Prompt</button>
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label">Paste AI Response Here:</label>
+                    <textarea class="form-textarea" id="synthesizedFutureText" placeholder="After generating and using the synthesis prompt above, paste the AI's synthesized future scenario here..." style="min-height: 200px;"></textarea>
+                </div>
+                
+                <div class="buttons">
+                    <button class="btn btn-secondary" id="step4Prev">← Back</button>
+                    <button class="btn btn-primary" id="step4Next" disabled>Begin Goal Setting →</button>
+                </div>
+            </div>
+            
+            <!-- Step 5: Goal Setting LADDER -->
+            <div class="step" id="step5">
+                <div class="step-header">
+                    <div class="step-number">5</div>
+                    <h2 class="step-title">Stage 1: Goal Setting</h2>
+                    <p class="step-description">Use LADDER to craft breakthrough goals for your synthesized future</p>
+                </div>
+                
+                <div class="summary-section">
+                    <div class="summary-title">Your 2027 Future Scenario:</div>
+                    <div id="futureScenarioSummary" style="font-style: italic;"></div>
                 </div>
                 
                 <div class="ladder-section">
@@ -593,729 +868,1018 @@
                         <div class="ladder-label">
                             <span class="ladder-letter">L</span>
                             LEAD - Your Breakthrough Goal
-                            <button class="copy-template-btn" onclick="copyTemplate('lead')">📋 Copy Template</button>
                         </div>
-                        <div class="ladder-hint">Format: "By December 2027, [specific organization/sector] will achieve [measurable outcome] resulting in [impact] through [AI capability]"</div>
-                        <div class="template-text" id="leadTemplate">
-                            <strong>Template:</strong><br>
-                            By December 2027, [specific organization/sector] will achieve [measurable outcome] resulting in [impact] through [AI capability]
-                        </div>
-                        <textarea class="form-textarea" id="lead" placeholder="Customize the template above for your breakthrough goal..."></textarea>
+                        <div class="ladder-hint">What specific breakthrough do you want to achieve in this future?</div>
+                        <textarea class="form-textarea" id="goalLead" placeholder="By December 2027, [organization/industry] will achieve [specific outcome] resulting in [measurable impact]"></textarea>
                     </div>
                     
                     <div class="ladder-field">
                         <div class="ladder-label">
                             <span class="ladder-letter">A</span>
-                            ANCHOR - Current Reality & Data
-                            <button class="copy-template-btn" onclick="copyTemplate('anchor')">📋 Copy Template</button>
+                            ANCHOR - Current Reality
                         </div>
-                        <div class="ladder-hint">Include specific metrics, costs, time delays, error rates, and market data that ground your goal in reality</div>
-                        <div class="template-text" id="anchorTemplate">
-                            <strong>Template:</strong><br>
-                            Current state: [Current metrics], costs [specific amounts], time delays [specific durations], error rates [percentages], market data [relevant statistics]. Recent studies show [specific findings]. Industry benchmarks indicate [comparison data].
-                        </div>
-                        <textarea class="form-textarea" id="anchor" placeholder="Customize the template above with your specific data..."></textarea>
+                        <div class="ladder-hint">What data, metrics, and facts ground your goal in today's reality?</div>
+                        <textarea class="form-textarea" id="goalAnchor" placeholder="Current state metrics, costs, inefficiencies, market data..."></textarea>
                     </div>
                     
                     <div class="ladder-field">
                         <div class="ladder-label">
                             <span class="ladder-letter">D</span>
-                            DETAIL - Your Strategic Reasoning
-                            <button class="copy-template-btn" onclick="copyTemplate('detail')">📋 Copy Template</button>
+                            DETAIL - Strategic Reasoning
                         </div>
-                        <div class="ladder-hint">Explain WHY this breakthrough is possible now, what technology trends enable it, and why 2027 is the right timeline</div>
-                        <div class="template-text" id="detailTemplate">
-                            <strong>Template:</strong><br>
-                            Reasoning: AI can [specific capability], recent advances show [specific results], infrastructure supports [specific requirements], competitive pressure demands [specific changes]. Technology readiness: [maturity level]. Market timing: [why now]. Strategic advantage: [competitive benefit].
-                        </div>
-                        <textarea class="form-textarea" id="detail" placeholder="Customize the template above with your reasoning..."></textarea>
+                        <div class="ladder-hint">Why is this goal achievable given your synthesized future?</div>
+                        <textarea class="form-textarea" id="goalDetail" placeholder="Given the future scenario, this goal is achievable because..."></textarea>
                     </div>
                     
                     <div class="ladder-field">
                         <div class="ladder-label">
                             <span class="ladder-letter">D</span>
                             DECLARE - Critical Assumptions
-                            <button class="copy-template-btn" onclick="copyTemplate('declare')">📋 Copy Template</button>
                         </div>
-                        <div class="ladder-hint">List what MUST be true for success: technology capabilities, market acceptance, regulatory environment, organizational readiness, competitive response</div>
-                        <div class="template-text" id="declareTemplate">
-                            <strong>Template:</strong><br>
-                            Critical assumptions: AI accuracy reaches [X]%, regulatory approval for [specific process], customer acceptance of [AI application], staff successfully retrain for AI collaboration, data quality improves to support AI, competitors don't block innovation through [specific concern]
-                        </div>
-                        <textarea class="form-textarea" id="declare" placeholder="Customize the template above for your critical assumptions..."></textarea>
+                        <div class="ladder-hint">What must be true for this goal to succeed?</div>
+                        <textarea class="form-textarea" id="goalDeclare" placeholder="Key assumptions about technology, market, organization..."></textarea>
                     </div>
                     
                     <div class="ladder-field">
                         <div class="ladder-label">
                             <span class="ladder-letter">E</span>
                             EXPLAIN - Analysis Needed
-                            <button class="copy-template-btn" onclick="copyTemplate('explain')">📋 Copy Template</button>
                         </div>
-                        <div class="ladder-hint">What specific help do you need to validate this goal and identify the pathway from today to breakthrough success?</div>
-                        <div class="template-text" id="explainTemplate">
-                            <strong>Template:</strong><br>
-                            Need analysis of: technical feasibility gaps, implementation timeline with milestones, change management requirements, competitive advantage sustainability, risk mitigation strategies, resource requirements, regulatory considerations, market readiness indicators.
-                        </div>
-                        <textarea class="form-textarea" id="explain" placeholder="Customize the template above for your analysis needs..."></textarea>
+                        <div class="ladder-hint">What help do you need to validate this goal?</div>
+                        <textarea class="form-textarea" id="goalExplain" placeholder="Need analysis of feasibility, risks, success factors..."></textarea>
                     </div>
                     
                     <div class="ladder-field">
                         <div class="ladder-label">
                             <span class="ladder-letter">R</span>
-                            REQUEST - Innovation Roadmap
-                            <button class="copy-template-btn" onclick="copyTemplate('request')">📋 Copy Template</button>
+                            REQUEST - Goal Validation
                         </div>
-                        <div class="ladder-hint">Ask for specific deliverables that will help you move from goal to business opportunities with timelines and success metrics</div>
-                        <div class="template-text" id="requestTemplate">
-                            <strong>Template:</strong><br>
-                            Please provide: (1) 18-month implementation roadmap with quarterly milestones, (2) Risk assessment with mitigation strategies, (3) Success metrics and validation checkpoints, (4) Required capabilities and partnerships, (5) Competitive advantage analysis, (6) Business model implications and opportunities
-                        </div>
-                        <textarea class="form-textarea" id="request" placeholder="Customize the template above for your specific goal..."></textarea>
+                        <div class="ladder-hint">What specific outputs do you want?</div>
+                        <textarea class="form-textarea" id="goalRequest" placeholder="(1) Refined goal statement, (2) Success metrics, (3) Risk assessment..."></textarea>
                     </div>
                 </div>
                 
                 <div class="buttons">
-                    <button class="btn btn-secondary" onclick="prevStep()">← Back</button>
-                    <button class="btn btn-primary" onclick="nextStep()">Generate Prompt →</button>
+                    <button class="btn btn-secondary" id="step5Prev">← Back</button>
+                    <button class="btn btn-primary" id="step5Next">Generate Goal Analysis →</button>
                 </div>
             </div>
-            
-            <!-- Step 5: Generated Prompt & Copy -->
-            <div class="step" id="step5">
+
+            <!-- Step 6: Goal Analysis Results -->
+            <div class="step" id="step6">
                 <div class="step-header">
-                    <div class="step-number">5</div>
-                    <h2 class="step-title">Copy Your LADDER Prompt</h2>
-                    <p class="step-description">Copy this prompt and paste it into your preferred AI tool (Claude, ChatGPT, etc.)</p>
+                    <div class="step-number">6</div>
+                    <h2 class="step-title">Goal Analysis Results</h2>
+                    <p class="step-description">Review your goal analysis and paste the AI response</p>
                 </div>
                 
                 <div class="ai-response">
                     <div class="ai-response-header">
                         <div class="ai-icon">📋</div>
-                        <strong>Generated LADDER Prompt</strong>
-                        <button class="btn btn-secondary" onclick="copyPrompt('goalPrompt')" style="margin-left: auto;">📋 Copy Prompt</button>
+                        <strong>Generated LADDER Prompt - Goal Setting</strong>
+                        <button class="btn btn-secondary" id="copyGoalBtn" style="margin-left: auto;">📋 Copy Prompt</button>
                     </div>
-                    <div class="prompt-output" id="goalPrompt">
-                        <!-- Prompt will be generated here -->
-                    </div>
+                    <div class="prompt-output" id="goalPromptOutput"></div>
                 </div>
                 
                 <div class="form-group">
                     <label class="form-label">Paste AI Response Here:</label>
-                    <textarea class="form-textarea" id="goalAIResponse" placeholder="After copying the prompt above to your AI tool, paste the response here..." style="min-height: 200px;"></textarea>
+                    <textarea class="form-textarea" id="goalAIResponse" placeholder="After using the prompt above with your AI tool, paste the goal analysis response here..." style="min-height: 200px;"></textarea>
                 </div>
                 
                 <div class="buttons">
-                    <button class="btn btn-secondary" onclick="prevStep()">← Refine Goal</button>
-                    <button class="btn btn-primary" onclick="nextStep()" id="goalResponseNext" disabled>Complete Workshop →</button>
+                    <button class="btn btn-secondary" id="step6Prev">← Refine Goal</button>
+                    <button class="btn btn-primary" id="step6Next" disabled>Begin Assumptions →</button>
                 </div>
             </div>
-            
-            <!-- Step 6: Workshop Complete -->
-            <div class="step" id="step6">
+
+            <!-- Step 7: Assumption Mapping -->
+            <div class="step" id="step7">
                 <div class="step-header">
-                    <div class="step-number">✅</div>
-                    <h2 class="step-title">Workshop Complete!</h2>
-                    <p class="step-description">Your AI-powered innovation roadmap is ready</p>
+                    <div class="step-number">7</div>
+                    <h2 class="step-title">Stage 2: Assumption Mapping</h2>
+                    <p class="step-description">Identify and test critical assumptions for your goal</p>
                 </div>
                 
                 <div class="summary-section">
-                    <div class="summary-title">🎯 Your Breakthrough Goal</div>
-                    <div id="finalGoalSummary" style="font-size: 1.1em; margin-bottom: 20px; padding: 15px; background: #f0f0f0; border-radius: 8px;"></div>
+                    <div class="summary-title">Your Goal:</div>
+                    <div id="goalSummary" style="font-style: italic;"></div>
                 </div>
                 
-                <div class="summary-section">
-                    <div class="summary-title">🤖 AI Analysis & Recommendations</div>
-                    <div id="finalAIAnalysis" style="max-height: 300px; overflow-y: auto; padding: 15px; background: #f8f9fa; border-radius: 8px; white-space: pre-wrap;"></div>
-                </div>
-                
-                <div class="summary-section">
-                    <div class="summary-title">📋 Next Steps</div>
-                    <div style="padding: 15px; background: #f0f8f0; border-radius: 8px;">
-                        <ol style="margin-left: 20px;">
-                            <li><strong>Test Key Assumptions:</strong> Start with your highest-risk assumptions identified by AI</li>
-                            <li><strong>30-Day Validation:</strong> Run the specific tests suggested in your analysis</li>
-                            <li><strong>Develop Business Case:</strong> Use AI insights to build detailed business plan</li>
-                            <li><strong>Secure Resources:</strong> Based on implementation roadmap requirements</li>
-                            <li><strong>Schedule Follow-up:</strong> Review progress and iterate in 6 weeks</li>
-                        </ol>
+                <div class="ladder-section">
+                    <div class="ladder-field">
+                        <div class="ladder-label">
+                            <span class="ladder-letter">L</span>
+                            LEAD - Assumption Discovery
+                        </div>
+                        <div class="ladder-hint">What assumptions underlie your goal's success?</div>
+                        <textarea class="form-textarea" id="assumptionLead" placeholder="Identify critical assumptions for achieving: [your goal]"></textarea>
+                    </div>
+                    
+                    <div class="ladder-field">
+                        <div class="ladder-label">
+                            <span class="ladder-letter">A</span>
+                            ANCHOR - Context & Evidence
+                        </div>
+                        <div class="ladder-hint">What evidence supports or challenges these assumptions?</div>
+                        <textarea class="form-textarea" id="assumptionAnchor" placeholder="Current trends, analogous cases, market signals..."></textarea>
+                    </div>
+                    
+                    <div class="ladder-field">
+                        <div class="ladder-label">
+                            <span class="ladder-letter">D</span>
+                            DETAIL - Assumption Categories
+                        </div>
+                        <div class="ladder-hint">How do assumptions span technology, market, organization, and ecosystem?</div>
+                        <textarea class="form-textarea" id="assumptionDetail" placeholder="Technology readiness, market acceptance, organizational capability..."></textarea>
+                    </div>
+                    
+                    <div class="ladder-field">
+                        <div class="ladder-label">
+                            <span class="ladder-letter">D</span>
+                            DECLARE - Testing Priorities
+                        </div>
+                        <div class="ladder-hint">Which assumptions are most critical to test first?</div>
+                        <textarea class="form-textarea" id="assumptionDeclare" placeholder="High-impact assumptions, quick tests, dependencies..."></textarea>
+                    </div>
+                    
+                    <div class="ladder-field">
+                        <div class="ladder-label">
+                            <span class="ladder-letter">E</span>
+                            EXPLAIN - Testing Methods
+                        </div>
+                        <div class="ladder-hint">What help do you need to design assumption tests?</div>
+                        <textarea class="form-textarea" id="assumptionExplain" placeholder="Need methods for validation, experiments, evidence gathering..."></textarea>
+                    </div>
+                    
+                    <div class="ladder-field">
+                        <div class="ladder-label">
+                            <span class="ladder-letter">R</span>
+                            REQUEST - Assumption Analysis
+                        </div>
+                        <div class="ladder-hint">What specific outputs do you want?</div>
+                        <textarea class="form-textarea" id="assumptionRequest" placeholder="(1) Assumption map, (2) Testing plan, (3) Risk assessment..."></textarea>
                     </div>
                 </div>
                 
-                <div class="export-buttons">
-                    <button class="btn btn-primary" onclick="exportResults('summary')">📄 Download Summary</button>
-                    <button class="btn btn-primary" onclick="exportResults('email')">📧 Email Results</button>
-                    <button class="btn btn-secondary" onclick="showMethodologyGuide()">📖 Learn the Process</button>
+                <div class="buttons">
+                    <button class="btn btn-secondary" id="step7Prev">← Back</button>
+                    <button class="btn btn-primary" id="step7Next">Generate Assumption Analysis →</button>
+                </div>
+            </div>
+
+            <!-- Step 8: Assumption Analysis Results -->
+            <div class="step" id="step8">
+                <div class="step-header">
+                    <div class="step-number">8</div>
+                    <h2 class="step-title">Assumption Analysis Results</h2>
+                    <p class="step-description">Review your assumption analysis and paste the AI response</p>
+                </div>
+                
+                <div class="ai-response">
+                    <div class="ai-response-header">
+                        <div class="ai-icon">📋</div>
+                        <strong>Generated LADDER Prompt - Assumption Mapping</strong>
+                        <button class="btn btn-secondary" id="copyAssumptionBtn" style="margin-left: auto;">📋 Copy Prompt</button>
+                    </div>
+                    <div class="prompt-output" id="assumptionPromptOutput"></div>
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label">Paste AI Response Here:</label>
+                    <textarea class="form-textarea" id="assumptionAIResponse" placeholder="After using the prompt above with your AI tool, paste the assumption analysis response here..." style="min-height: 200px;"></textarea>
                 </div>
                 
                 <div class="buttons">
-                    <button class="btn btn-secondary" onclick="prevStep()">← Back to Results</button>
-                    <button class="btn btn-primary" onclick="restartWorkshop()">Start New Workshop</button>
+                    <button class="btn btn-secondary" id="step8Prev">← Refine Assumptions</button>
+                    <button class="btn btn-primary" id="step8Next" disabled>Begin Pathways →</button>
+                </div>
+            </div>
+
+            <!-- Step 9: Pathway Development -->
+            <div class="step" id="step9">
+                <div class="step-header">
+                    <div class="step-number">9</div>
+                    <h2 class="step-title">Stage 3: Pathway Development</h2>
+                    <p class="step-description">Map pathways from today to your goal</p>
+                </div>
+                
+                <div class="summary-section">
+                    <div class="summary-title">Your Goal & Key Assumptions:</div>
+                    <div id="pathwaySummary" style="font-style: italic;"></div>
+                </div>
+                
+                <div class="ladder-section">
+                    <div class="ladder-field">
+                        <div class="ladder-label">
+                            <span class="ladder-letter">L</span>
+                            LEAD - Pathway Mapping
+                        </div>
+                        <div class="ladder-hint">What pathways lead from today to your goal?</div>
+                        <textarea class="form-textarea" id="pathwayLead" placeholder="Map routes from current state to goal achievement..."></textarea>
+                    </div>
+                    
+                    <div class="ladder-field">
+                        <div class="ladder-label">
+                            <span class="ladder-letter">A</span>
+                            ANCHOR - Starting Position
+                        </div>
+                        <div class="ladder-hint">What resources, capabilities, and constraints define your starting point?</div>
+                        <textarea class="form-textarea" id="pathwayAnchor" placeholder="Current capabilities, resources, market position..."></textarea>
+                    </div>
+                    
+                    <div class="ladder-field">
+                        <div class="ladder-label">
+                            <span class="ladder-letter">D</span>
+                            DETAIL - Milestone Sequencing
+                        </div>
+                        <div class="ladder-hint">What milestones and decision points structure the journey?</div>
+                        <textarea class="form-textarea" id="pathwayDetail" placeholder="Key milestones, dependencies, decision gates..."></textarea>
+                    </div>
+                    
+                    <div class="ladder-field">
+                        <div class="ladder-label">
+                            <span class="ladder-letter">D</span>
+                            DECLARE - Success Criteria
+                        </div>
+                        <div class="ladder-hint">How will you know you're on the right path?</div>
+                        <textarea class="form-textarea" id="pathwayDeclare" placeholder="Success indicators, warning signs, pivot triggers..."></textarea>
+                    </div>
+                    
+                    <div class="ladder-field">
+                        <div class="ladder-label">
+                            <span class="ladder-letter">E</span>
+                            EXPLAIN - Implementation Help
+                        </div>
+                        <div class="ladder-hint">What help do you need for pathway implementation?</div>
+                        <textarea class="form-textarea" id="pathwayExplain" placeholder="Need guidance on sequencing, resources, partnerships..."></textarea>
+                    </div>
+                    
+                    <div class="ladder-field">
+                        <div class="ladder-label">
+                            <span class="ladder-letter">R</span>
+                            REQUEST - Pathway Deliverables
+                        </div>
+                        <div class="ladder-hint">What specific outputs do you want?</div>
+                        <textarea class="form-textarea" id="pathwayRequest" placeholder="(1) Implementation roadmap, (2) Resource plan, (3) Risk mitigation..."></textarea>
+                    </div>
+                </div>
+                
+                <div class="buttons">
+                    <button class="btn btn-secondary" id="step9Prev">← Back</button>
+                    <button class="btn btn-primary" id="step9Next">Generate Pathway Analysis →</button>
+                </div>
+            </div>
+
+            <!-- Step 10: Pathway Results & Workshop Complete -->
+            <div class="step" id="step10">
+                <div class="step-header">
+                    <div class="step-number">✅</div>
+                    <h2 class="step-title">Workshop Complete!</h2>
+                    <p class="step-description">Your probabilistic future planning is ready</p>
+                </div>
+                
+                <div class="ai-response">
+                    <div class="ai-response-header">
+                        <div class="ai-icon">📋</div>
+                        <strong>Generated LADDER Prompt - Pathway Development</strong>
+                        <button class="btn btn-secondary" id="copyPathwayBtn" style="margin-left: auto;">📋 Copy Prompt</button>
+                    </div>
+                    <div class="prompt-output" id="pathwayPromptOutput"></div>
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label">Paste AI Response Here:</label>
+                    <textarea class="form-textarea" id="pathwayAIResponse" placeholder="After using the prompt above with your AI tool, paste the pathway analysis response here..." style="min-height: 200px;"></textarea>
+                </div>
+                
+                <div class="summary-section">
+                    <div class="summary-title">🎯 Innovation Planning Summary</div>
+                    <div id="workshopSummary">
+                        <p><strong>Synthesized Future:</strong> <span id="futureBrief"></span></p>
+                        <p><strong>Breakthrough Goal:</strong> <span id="goalBrief"></span></p>
+                        <p><strong>Critical Assumptions:</strong> <span id="assumptionCount">Multiple assumptions identified</span></p>
+                        <p><strong>Implementation Pathways:</strong> <span id="pathwayCount">Multiple pathways mapped</span></p>
+                    </div>
+                </div>
+                
+                <div class="summary-section">
+                    <div class="summary-title">📊 Monitoring Framework</div>
+                    <p>Track these signals to validate your probabilistic future:</p>
+                    <ul style="margin-left: 20px;">
+                        <li>Early indicators from your assumption tests</li>
+                        <li>Market signals aligning with scenario probabilities</li>
+                        <li>Technology readiness matching expectations</li>
+                        <li>Organizational capability development</li>
+                    </ul>
+                    <p style="margin-top: 15px;"><strong>Recommendation:</strong> Revisit probabilities quarterly as evidence emerges</p>
+                </div>
+                
+                <div class="export-buttons">
+                    <button class="btn btn-primary" id="exportBtn">📄 Export Full Analysis</button>
+                    <button class="btn btn-primary" id="printBtn">🖨️ Print Summary</button>
+                    <button class="btn btn-secondary" id="restartBtn">🔄 Start New Workshop</button>
                 </div>
             </div>
         </div>
     </div>
 
-    <script>
-        // Global state
-        let currentStep = 1;
-        let totalSteps = 6; // Updated to include completion step
-        let selectedScenario = null;
-        let workshopData = {};
-        
-        // Industry-Agnostic scenarios
-        let scenarios = {
-            1: {
-                title: "🎯 AI-Powered Decision Acceleration",
-                description: "By 2027, Norwegian organizations reduce critical decision-making time by 90% through AI-powered analysis, enabling breakthrough speed in approvals, diagnoses, strategic choices, and resource allocation.",
-                impact: "Impact: 10x faster organizational responses + 60% better decision quality",
-                anchor: "Current decision-making in Norway averages 3-8 weeks for critical choices, with 35% requiring multiple revisions. AI pilots show 85% time reduction in analysis phases. Norwegian organizations spend NOK 150B annually on decision-related delays and rework."
-            },
-            2: {
-                title: "♻️ AI-Optimized Resource Management",
-                description: "By 2027, Norway achieves 70% resource efficiency gains through AI optimization across energy, materials, workforce, and capital allocation, becoming the world's most efficient resource utilization economy.",
-                impact: "Impact: 70% efficiency gains + NOK 200B in savings annually",
-                anchor: "Norway currently wastes 40% of allocated resources across sectors due to poor optimization. Energy grid inefficiencies cost NOK 25B annually, workforce misallocation costs NOK 80B, material waste costs NOK 45B. AI optimization pilots show 60-80% efficiency improvements."
-            },
-            3: {
-                title: "🤝 AI-Enhanced Human Collaboration",
-                description: "By 2027, Norwegian knowledge workers achieve 10x productivity gains through AI that amplifies human creativity, automates routine tasks, and enables seamless cross-functional collaboration at unprecedented scale.",
-                impact: "Impact: 10x knowledge worker productivity + 50% faster innovation cycles",
-                anchor: "Norwegian knowledge workers spend 60% of time on routine tasks, 25% on coordination, leaving only 15% for creative work. Average project cycle time is 18 months. AI collaboration tools in pilots show 8x productivity gains and 70% faster project completion."
-            },
-            4: {
-                title: "🔮 AI-Predictive Operations",
-                description: "By 2027, Norwegian organizations prevent 80% of system failures, delays, and disruptions through AI that predicts and prevents problems before they occur across all operational domains.",
-                impact: "Impact: 80% failure prevention + NOK 300B in avoided costs annually",
-                anchor: "System failures currently cost Norwegian organizations NOK 400B annually in downtime, delays, and emergency responses. Predictive maintenance pilots show 75-85% failure prevention rates. Average system downtime costs NOK 2M per hour across sectors."
-            }
-        };
-        
-        // Initialize
-        renderScenarios();
-        updateProgress();
-        
-        function renderScenarios() {
-            const grid = document.getElementById('scenarioGrid');
-            grid.innerHTML = '';
+    <script type="module">
+        // Import Firebase modules
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
+        import { getAuth, onAuthStateChanged, signInAnonymously, signInWithCustomToken } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
+        import { getFirestore, doc, setDoc, onSnapshot, setLogLevel } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+
+        document.addEventListener('DOMContentLoaded', () => {
+            // --- Firebase Setup ---
+            let db, auth;
+            const appId = typeof __app_id !== 'undefined' ? __app_id : 'default-app-id';
             
-            Object.keys(scenarios).forEach(key => {
-                const scenario = scenarios[key];
-                const div = document.createElement('div');
-                div.className = 'scenario-card';
-                div.onclick = () => selectScenario(key);
-                div.innerHTML = `
-                    <div class="scenario-title">${scenario.title}</div>
-                    <div class="scenario-description">${scenario.description}</div>
-                    <div class="scenario-impact">${scenario.impact}</div>
-                `;
-                grid.appendChild(div);
-            });
-        }
-        
-        function selectScenario(id) {
-            document.querySelectorAll('.scenario-card').forEach(card => {
-                card.classList.remove('selected');
-            });
-            
-            event.target.closest('.scenario-card').classList.add('selected');
-            
-            selectedScenario = id;
-            workshopData.scenario = scenarios[id];
-            
-            document.getElementById('scenarioNext').disabled = false;
-        }
-        
-        function nextStep() {
-            if (!validateCurrentStep()) {
+            try {
+                const firebaseConfig = JSON.parse(typeof __firebase_config !== 'undefined' ? __firebase_config : '{}');
+                const app = initializeApp(firebaseConfig);
+                db = getFirestore(app);
+                auth = getAuth(app);
+                setLogLevel('debug');
+            } catch (error) {
+                console.error("Firebase initialization failed:", error);
+                document.body.innerHTML = '<h1>Error: Could not connect to the workshop service. Please try again later.</h1>';
                 return;
             }
             
-            saveCurrentStepData();
-            
-            if (currentStep < totalSteps) {
-                document.getElementById(`step${currentStep}`).classList.remove('active');
-                currentStep++;
-                document.getElementById(`step${currentStep}`).classList.add('active');
-                prepareCurrentStep();
-                updateProgress();
-            }
-        }
-        
-        function prevStep() {
-            if (currentStep > 1) {
-                document.getElementById(`step${currentStep}`).classList.remove('active');
-                currentStep--;
-                document.getElementById(`step${currentStep}`).classList.add('active');
-                updateProgress();
-            }
-        }
-        
-        function validateCurrentStep() {
-            switch(currentStep) {
-                case 1:
-                    const teamName = document.getElementById('teamName').value.trim();
-                    if (!teamName) {
-                        alert('Please fill in your team name.');
-                        return false;
-                    }
-                    return true;
-                    
-                case 2:
-                    if (!selectedScenario) {
-                        alert('Please select a scenario.');
-                        return false;
-                    }
-                    return true;
-                    
-                case 4:
-                    const ladderFields = ['lead', 'anchor', 'detail', 'declare', 'explain', 'request'];
-                    for (let field of ladderFields) {
-                        if (!document.getElementById(field).value.trim()) {
-                            alert(`Please fill in the ${field.toUpperCase()} field.`);
-                            return false;
-                        }
-                    }
-                    return true;
-                    
-                case 5:
-                    const goalResponse = document.getElementById('goalAIResponse');
-                    if (!goalResponse || goalResponse.value.trim().length < 50) {
-                        alert('Please paste a substantial AI response (at least 50 characters).');
-                        return false;
-                    }
-                    return true;
-                    
-                default:
-                    return true;
-            }
-        }
-        
-        function exportResults(format) {
-            const fullResults = {
-                team: {
-                    name: workshopData.teamName,
-                    context: workshopData.teamContext
-                },
-                scenario: workshopData.scenario,
-                uncertainties: workshopData.uncertainties,
-                goal: workshopData.goalLadder,
-                aiAnalysis: workshopData.goalAIResponse
+            const scenariosDocRef = doc(db, `artifacts/${appId}/public/data/workshopScenarios/shared`);
+
+            // --- State & Constants ---
+            let currentStep = 1;
+            const totalSteps = 10;
+            let workshopData = {
+                teamName: '',
+                teamContext: '',
+                probabilities: {},
+                uncertainties: [],
+                industryContext: '',
+                synthesizedFuture: '',
+                goal: {},
+                assumptions: {},
+                pathways: {}
             };
             
-            switch(format) {
-                case 'summary':
-                    generateSummary(fullResults);
-                    break;
-                case 'email':
-                    emailResults(fullResults);
-                    break;
-            }
-        }
-        
-        function generateSummary(results) {
-            const content = `AI INNOVATION WORKSHOP RESULTS
-=====================================
+            let scenarios = {
+                1: { title: 'Scenario 1: Hyper-Adoption', description: 'A world where AI is rapidly and widely adopted across all sectors, leading to massive productivity gains but also significant social disruption.' },
+                2: { title: 'Scenario 2: Regulatory Gridlock', description: 'Governments and international bodies impose strict regulations on AI development and deployment, slowing innovation but ensuring safety and ethical considerations.' },
+                3: { title: 'Scenario 3: Geopolitical Fragmentation', description: 'AI development splinters along geopolitical lines, creating competing tech ecosystems (e.g., US, China, EU) with limited interoperability.' },
+                4: { title: 'Scenario 4: The Great Stagnation', description: 'Despite initial hype, AI progress stalls due to unforeseen technical hurdles, data limitations, or economic downturns, leading to a period of disillusionment.' }
+            };
 
-Team: ${results.team.name}
-Context: ${results.team.context || 'Not specified'}
-Date: ${new Date().toLocaleDateString()}
-
-SELECTED SCENARIO:
-${results.scenario?.title || 'Not specified'}
-${results.scenario?.description || ''}
-
-TEAM UNCERTAINTIES:
-${results.uncertainties ? results.uncertainties.map((u, i) => `${i+1}. ${u}`).join('\n') : 'None specified'}
-
-BREAKTHROUGH GOAL:
-${results.goal?.lead || 'Not specified'}
-
-CURRENT REALITY (ANCHOR):
-${results.goal?.anchor || 'Not specified'}
-
-STRATEGIC REASONING (DETAIL):
-${results.goal?.detail || 'Not specified'}
-
-CRITICAL ASSUMPTIONS (DECLARE):
-${results.goal?.declare || 'Not specified'}
-
-ANALYSIS NEEDED (EXPLAIN):
-${results.goal?.explain || 'Not specified'}
-
-DELIVERABLES REQUESTED:
-${results.goal?.request || 'Not specified'}
-
-AI ANALYSIS & RECOMMENDATIONS:
-${results.aiAnalysis || 'No AI analysis provided'}
-
-NEXT STEPS:
-1. Test top 3 assumptions within 30 days
-2. Develop pilot program for most promising opportunity
-3. Schedule follow-up session in 6 weeks
-4. Use LADDER framework for future innovation projects
-
-METHODOLOGY LEARNED:
-✓ Reverse-engineering from audacious goals
-✓ Uncertainty injection into scenarios
-✓ LADDER framework for AI collaboration
-✓ Assumption-driven innovation development
-
-Generated by AI Innovation Workshop Tool | Chock
-Visit: https://chock.llc for more innovation tools
-            `;
+            const phases = {
+                1: { name: "Phase 1: Probabilistic Future Synthesis", steps: [1, 2, 3, 4] },
+                2: { name: "Phase 2: Three-Stage LADDER Analysis", steps: [5, 6, 7, 8, 9] },
+                3: { name: "Phase 3: Workshop Completion", steps: [10] }
+            };
             
-            const blob = new Blob([content], { type: 'text/plain' });
-            const url = window.URL.createObjectURL(blob);
-            const a = document.createElement('a');
-            a.href = url;
-            a.download = `${(results.team.name || 'Team').replace(/\s+/g, '_')}_AI_Workshop_Results.txt`;
-            a.click();
-            window.URL.revokeObjectURL(url);
-        }
-        
-        function emailResults(results) {
-            const subject = `AI Innovation Workshop Results - ${results.team.name}`;
-            const body = `Hi team,
+            // --- Function Definitions ---
+            const toggleSettings = () => {
+                const modal = document.getElementById('settingsModal');
+                modal.style.display = (modal.style.display === 'block') ? 'none' : 'block';
+                if (modal.style.display === 'block') {
+                    renderScenarioEditors();
+                }
+            };
 
-Here are our AI Innovation Workshop results:
+            const renderScenarioEditors = () => {
+                const container = document.getElementById('scenarioEditors');
+                container.innerHTML = '';
+                const scenarioKeys = Object.keys(scenarios);
 
-BREAKTHROUGH GOAL:
-${results.goal?.lead || 'Not specified'}
-
-KEY UNCERTAINTIES WE IDENTIFIED:
-${results.uncertainties ? results.uncertainties.map((u, i) => `${i+1}. ${u}`).join('\n') : 'None specified'}
-
-AI RECOMMENDATIONS SUMMARY:
-${results.aiAnalysis ? results.aiAnalysis.substring(0, 500) + '...' : 'See full analysis in downloaded summary'}
-
-NEXT STEPS:
-1. Test our key assumptions (details in full summary)
-2. Develop pilot program for top opportunity
-3. Schedule follow-up in 6 weeks
-
-Ready to reverse-engineer the future!
-
-Best regards,
-The Innovation Team
-
-Generated by Chock AI Innovation Workshop Tool`;
-            
-            const mailtoLink = `mailto:?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
-            window.location.href = mailtoLink;
-        }
-        
-        function showMethodologyGuide() {
-            alert(`REVERSE-ENGINEERING INNOVATION METHODOLOGY
-
-You've just experienced a systematic approach to breakthrough innovation:
-
-1. START WITH THE FUTURE
-   • Choose exciting scenarios, not current problems
-   • Make uncertainties explicit and valuable
-
-2. CRAFT AUDACIOUS GOALS  
-   • Use LADDER framework for structured thinking
-   • Aim for 10x improvements, not incremental
-
-3. LEVERAGE AI AS THINKING PARTNER
-   • AI enhances human judgment, doesn't replace it
-   • LADDER prompts ensure comprehensive analysis
-
-4. FOCUS ON BUSINESS OPPORTUNITIES
-   • Let validated insights guide opportunities
-   • Focus on concrete value propositions with timelines
-
-APPLY THIS TO ANY INNOVATION CHALLENGE:
-• Strategic planning sessions
-• New product development  
-• Market entry decisions
-• Technology roadmapping
-
-KEY INSIGHT: Working backward from success reveals assumptions and opportunities that forward planning misses.
-
-Visit chock.llc for more innovation tools and workshops.`);
-        }
-        
-        function restartWorkshop() {
-            if (confirm('Are you sure you want to start a new workshop? All current progress will be lost.')) {
-                // Reset all data
-                currentStep = 1;
-                selectedScenario = null;
-                workshopData = {};
-                
-                // Hide all steps
-                document.querySelectorAll('.step').forEach(step => {
-                    step.classList.remove('active');
+                scenarioKeys.forEach(key => {
+                    const scenario = scenarios[key];
+                    const editorHtml = `
+                        <div class="scenario-editor" id="editor-${key}">
+                            <button class="remove-scenario-btn" data-key="${key}">${scenarioKeys.length <= 4 ? '' : '×'}</button>
+                            <h4>Scenario ${key}</h4>
+                            <div class="editor-field">
+                                <label>Title</label>
+                                <input type="text" id="title-${key}" value="${scenario.title}">
+                            </div>
+                            <div class="editor-field">
+                                <label>Description (10-Year Outlook)</label>
+                                <textarea id="description-${key}">${scenario.description}</textarea>
+                            </div>
+                        </div>
+                    `;
+                    container.insertAdjacentHTML('beforeend', editorHtml);
                 });
                 
-                // Show first step
-                document.getElementById('step1').classList.add('active');
-                
-                // Clear all form fields
-                document.querySelectorAll('input, textarea').forEach(field => {
-                    field.value = '';
-                });
-                
-                // Reset scenario selection
-                document.querySelectorAll('.scenario-card').forEach(card => {
-                    card.classList.remove('selected');
-                });
-                
-                // Reset progress
-                updateProgress();
-                
-                // Disable buttons that require input
-                const scenarioNext = document.getElementById('scenarioNext');
-                const goalResponseNext = document.getElementById('goalResponseNext');
-                if (scenarioNext) scenarioNext.disabled = true;
-                if (goalResponseNext) goalResponseNext.disabled = true;
-            }
-        }
-        
-        function saveCurrentStepData() {
-            switch(currentStep) {
-                case 1:
-                    workshopData.teamName = document.getElementById('teamName').value;
-                    workshopData.teamContext = document.getElementById('teamContext').value;
-                    break;
-                    
-                case 3:
-                    workshopData.uncertainties = [
-                        document.getElementById('uncertainty1').value,
-                        document.getElementById('uncertainty2').value,
-                        document.getElementById('uncertainty3').value
-                    ].filter(u => u.trim() !== '');
-                    break;
-                    
-                case 4:
-                    workshopData.goalLadder = {
-                        lead: document.getElementById('lead').value,
-                        anchor: document.getElementById('anchor').value,
-                        detail: document.getElementById('detail').value,
-                        declare: document.getElementById('declare').value,
-                        explain: document.getElementById('explain').value,
-                        request: document.getElementById('request').value
+                document.querySelectorAll('.remove-scenario-btn').forEach(btn => btn.disabled = scenarioKeys.length <= 4);
+                document.getElementById('addScenarioBtn').disabled = scenarioKeys.length >= 6;
+            };
+
+            const addScenario = () => {
+                const scenarioKeys = Object.keys(scenarios);
+                if (scenarioKeys.length < 6) {
+                    const newKey = scenarioKeys.length > 0 ? Math.max(...scenarioKeys.map(Number)) + 1 : 1;
+                    scenarios[newKey] = { title: `Scenario ${newKey} Title`, description: 'Describe the new scenario here...' };
+                    renderScenarioEditors();
+                }
+            };
+
+            const removeScenario = (key) => {
+                const scenarioKeys = Object.keys(scenarios);
+                if (scenarioKeys.length > 4) {
+                    delete scenarios[key];
+                    const remainingScenarios = Object.values(scenarios);
+                    scenarios = {};
+                    remainingScenarios.forEach((scenario, index) => {
+                        scenarios[index + 1] = scenario;
+                    });
+                    renderScenarioEditors();
+                }
+            };
+
+            const saveScenarios = async () => {
+                const newScenarios = {};
+                const editorContainer = document.getElementById('scenarioEditors');
+                const editorKeys = Array.from(editorContainer.children).map(div => div.id.split('-')[1]);
+
+                editorKeys.forEach((key, index) => {
+                    const newKey = index + 1;
+                    newScenarios[newKey] = {
+                        title: document.getElementById(`title-${key}`).value,
+                        description: document.getElementById(`description-${key}`).value
                     };
-                    break;
+                });
+                
+                try {
+                    await setDoc(scenariosDocRef, { content: JSON.stringify(newScenarios) });
+                    console.log("Scenarios saved to Firestore.");
+                } catch (error) {
+                    console.error("Error saving scenarios to Firestore: ", error);
+                }
+                
+                toggleSettings();
+            };
+            
+            const updateScenarioDisplay = () => {
+                const container = document.getElementById('scenario-probability-container');
+                container.innerHTML = '';
+                const scenarioCount = Object.keys(scenarios).length;
+                if (scenarioCount === 0) return;
+
+                const initialProb = Math.floor(100 / scenarioCount);
+                
+                Object.keys(scenarios).forEach((key, index) => {
+                    const scenario = scenarios[key];
+                    let currentProb = initialProb;
+                    if (index === 0) {
+                        currentProb += 100 % scenarioCount;
+                    }
+                    workshopData.probabilities[key] = currentProb;
+
+                    const scenarioHtml = `
+                    <div class="scenario-probability">
+                        <div class="scenario-title">${scenario.title}</div>
+                        <div class="scenario-description">${scenario.description.substring(0, 150)}...</div>
+                        <div class="probability-control">
+                            <span>Probability:</span>
+                            <input type="range" class="probability-slider" id="prob${key}" min="0" max="100" value="${currentProb}">
+                            <span class="probability-value" id="probValue${key}">${currentProb}%</span>
+                        </div>
+                    </div>`;
+                    container.innerHTML += scenarioHtml;
+                });
+                updateProbabilities();
+            };
+            
+            const nextStep = () => {
+                if (validateCurrentStep()) {
+                    saveStepData();
                     
-                case 5:
-                    workshopData.goalAIResponse = document.getElementById('goalAIResponse').value;
-                    break;
-            }
-        }
-        
-        function prepareCurrentStep() {
-            switch(currentStep) {
-                case 3:
-                    if (workshopData.scenario) {
-                        document.getElementById('selectedScenarioSummary').innerHTML = `
-                            <strong>${workshopData.scenario.title}</strong><br>
-                            ${workshopData.scenario.description}
-                        `;
+                    if (currentStep < totalSteps) {
+                        document.getElementById(`step${currentStep}`).classList.remove('active');
+                        currentStep++;
+                        document.getElementById(`step${currentStep}`).classList.add('active');
+                        updateProgress();
+                        updatePhase();
+                        prepareStep();
                     }
-                    break;
-                    
-                case 4:
-                    if (workshopData.scenario && !document.getElementById('anchor').value) {
-                        document.getElementById('anchor').value = workshopData.scenario.anchor;
+                }
+            };
+            
+            const prevStep = () => {
+                if (currentStep > 1) {
+                    document.getElementById(`step${currentStep}`).classList.remove('active');
+                    currentStep--;
+                    document.getElementById(`step${currentStep}`).classList.add('active');
+                    updateProgress();
+                    updatePhase();
+                }
+            };
+            
+            const updateProgress = () => {
+                const progressFill = document.getElementById('progressFill');
+                if (progressFill) {
+                    const progress = (currentStep / totalSteps) * 100;
+                    progressFill.style.width = progress + '%';
+                }
+            };
+            
+            const updatePhase = () => {
+                let currentPhase = 1;
+                for (let phase in phases) {
+                    if (phases[phase].steps.includes(currentStep)) {
+                        currentPhase = phase;
+                        break;
                     }
-                    break;
-                    
-                case 5:
-                    if (workshopData.goalLadder) {
-                        const prompt = generateLadderPrompt(workshopData.goalLadder, 'goal');
-                        document.getElementById('goalPrompt').textContent = prompt;
+                }
+                
+                const indicator = document.getElementById('phaseIndicator');
+                if(indicator) {
+                    indicator.textContent = phases[currentPhase].name;
+                    indicator.className = 'phase-indicator active';
+                }
+            };
+            
+            const validateCurrentStep = () => true;
+            
+            const saveStepData = () => {
+                switch(currentStep) {
+                    case 1:
+                        workshopData.teamName = document.getElementById('teamName').value;
+                        workshopData.teamContext = document.getElementById('teamContext').value;
+                        break;
+                    case 3:
+                        workshopData.uncertainties = [
+                            document.getElementById('uncertainty1').value,
+                            document.getElementById('uncertainty2').value,
+                            document.getElementById('uncertainty3').value
+                        ].filter(u => u.trim());
+                        workshopData.industryContext = document.getElementById('industryContext').value;
+                        break;
+                    case 4:
+                        workshopData.synthesizedFuture = document.getElementById('synthesizedFutureText').value;
+                        break;
+                    case 5:
+                        workshopData.goal = {
+                            lead: document.getElementById('goalLead').value,
+                            anchor: document.getElementById('goalAnchor').value,
+                            detail: document.getElementById('goalDetail').value,
+                            declare: document.getElementById('goalDeclare').value,
+                            explain: document.getElementById('goalExplain').value,
+                            request: document.getElementById('goalRequest').value
+                        };
+                        generateGoalPrompt();
+                        break;
+                    case 6:
+                        workshopData.goal.aiResponse = document.getElementById('goalAIResponse').value;
+                        break;
+                    case 7:
+                        workshopData.assumptions = {
+                            lead: document.getElementById('assumptionLead').value,
+                            anchor: document.getElementById('assumptionAnchor').value,
+                            detail: document.getElementById('assumptionDetail').value,
+                            declare: document.getElementById('assumptionDeclare').value,
+                            explain: document.getElementById('assumptionExplain').value,
+                            request: document.getElementById('assumptionRequest').value
+                        };
+                        generateAssumptionPrompt();
+                        break;
+                    case 8:
+                        workshopData.assumptions.aiResponse = document.getElementById('assumptionAIResponse').value;
+                        break;
+                    case 9:
+                        workshopData.pathways = {
+                            lead: document.getElementById('pathwayLead').value,
+                            anchor: document.getElementById('pathwayAnchor').value,
+                            detail: document.getElementById('pathwayDetail').value,
+                            declare: document.getElementById('pathwayDeclare').value,
+                            explain: document.getElementById('pathwayExplain').value,
+                            request: document.getElementById('pathwayRequest').value
+                        };
+                        generatePathwayPrompt();
+                        break;
+                }
+            };
+            
+            const prepareStep = () => {
+                switch(currentStep) {
+                    case 3:
+                        displayProbabilitySummary();
+                        break;
+                    case 5:
+                        document.getElementById('futureScenarioSummary').textContent = workshopData.synthesizedFuture.substring(0, 200) + '...';
+                        break;
+                    case 6:
+                        document.getElementById('step6Next').disabled = workshopData.goal.aiResponse.trim().length < 50;
+                        break;
+                    case 7:
+                        document.getElementById('goalSummary').textContent = workshopData.goal.lead;
+                        break;
+                    case 8:
+                        document.getElementById('step8Next').disabled = workshopData.assumptions.aiResponse.trim().length < 50;
+                        break;
+                    case 9:
+                        document.getElementById('pathwaySummary').textContent = 
+                            `Goal: ${workshopData.goal.lead.substring(0, 100)}... | Key assumptions validated`;
+                        break;
+                    case 10:
+                        prepareFinalSummary();
+                        break;
+                }
+            };
+            
+            const updateProbabilities = () => {
+                let total = 0;
+                Object.keys(scenarios).forEach(key => {
+                    const slider = document.getElementById(`prob${key}`);
+                    if(slider) {
+                        const value = parseInt(slider.value);
+                        workshopData.probabilities[key] = value;
+                        document.getElementById(`probValue${key}`).textContent = value + '%';
+                        total += value;
                     }
-                    break;
-                    
-                case 6:
-                    // Populate completion summary
-                    if (workshopData.goalLadder) {
-                        document.getElementById('finalGoalSummary').textContent = workshopData.goalLadder.lead;
+                });
+                
+                const totalDiv = document.getElementById('totalProbability');
+                if (!totalDiv) return;
+
+                totalDiv.querySelector('span').textContent = total + '%';
+                
+                if (total === 100) {
+                    totalDiv.classList.remove('invalid');
+                    totalDiv.classList.add('valid');
+                    document.getElementById('step2Next').disabled = false;
+                } else {
+                    totalDiv.classList.remove('valid');
+                    totalDiv.classList.add('invalid');
+                    document.getElementById('step2Next').disabled = true;
+                }
+            };
+            
+            const displayProbabilitySummary = () => {
+                let summary = '<div style="display: grid; gap: 10px;">';
+                Object.keys(scenarios).forEach(key => {
+                    if (workshopData.probabilities[key] > 0) {
+                        summary += `<div><strong>${scenarios[key].title}:</strong> ${workshopData.probabilities[key]}%</div>`;
                     }
-                    if (workshopData.goalAIResponse) {
-                        document.getElementById('finalAIAnalysis').textContent = workshopData.goalAIResponse;
-                    }
-                    break;
-            }
-        }
-        
-        function generateLadderPrompt(ladderData, type) {
-            return `TEAM: ${workshopData.teamName || 'Innovation Team'}
-CONTEXT: ${workshopData.teamContext || 'Strategic Innovation Workshop'}
-SCENARIO: ${workshopData.scenario?.title || 'Not specified'}
-FOCUS: Reverse-Engineering ${type.toUpperCase()} for Business Innovation
+                });
+                summary += '</div>';
+                document.getElementById('probabilitySummary').innerHTML = summary;
+            };
+            
+            const generateFutureSynthesis = () => {
+                const probText = Object.keys(scenarios).map(key => {
+                    const prob = workshopData.probabilities[key];
+                    const scenario = scenarios[key];
+                    return `${prob}% - ${scenario.title}\n${scenario.description}`;
+                }).join('\n\n');
+                
+                const uncertainties = workshopData.uncertainties.length > 0 
+                    ? workshopData.uncertainties.join(', ') 
+                    : 'No specific uncertainties identified';
+                
+                const prompt = `TEAM: ${workshopData.teamName}
+TYPE: PROBABILISTIC FUTURE SYNTHESIS FOR 2027
 
-LEAD: ${ladderData.lead}
+LEAD: Synthesize a coherent 2027 future scenario for our business context. Blend the following long-term (10-year) scenarios based on the probability weights your team assigned. Create a narrative that describes what our world looks like two years from now.
 
-ANCHOR: ${ladderData.anchor}
+LONG-TERM SCENARIOS & PROBABILITIES:
+${probText}
 
-DETAIL: ${ladderData.detail}
+ANCHOR: Our specific business/industry context: ${workshopData.industryContext}. Our key uncertainties: ${uncertainties}.
 
-DECLARE: ${ladderData.declare}
+DETAIL: Create a narrative that reflects the weighted blend of the long-term scenarios. Scenarios with higher probabilities should have a stronger influence on the 2027 future, while lower-probability scenarios can add nuance or represent emerging risks/opportunities. The narrative must feel concrete and directly relevant to our business context.
 
-EXPLAIN: ${ladderData.explain}
-
-REQUEST: ${ladderData.request}
-
-IMPORTANT: This is for developing concrete business opportunities with implementation timelines, not theoretical analysis. Focus on actionable insights that can lead to new ventures, products, or services with clear revenue models and 30-day validation tests.
+REQUEST: Provide a 400-500 word narrative describing our 2027 future that:
+(1) Authentically reflects the probability weights of the long-term scenarios.
+(2) Is grounded in our specific industry context.
+(3) Addresses how our stated uncertainties might play out in the next two years.
+(4) Feels concrete with specific examples, not generic.
+(5) Provides clear implications for setting a new business goal in this 2027 future.
 
 ---
-Generated by AI Innovation Workshop Tool | Chock`;
-        }
-        
-        function copyTemplate(fieldType) {
-            try {
-                let templateText = '';
+Generated by Probabilistic Future Synthesis | Chock`;
                 
-                switch(fieldType) {
-                    case 'lead':
-                        templateText = `By December 2027, [specific organization/sector] will achieve [measurable outcome] resulting in [impact] through [AI capability]`;
-                        break;
-                    case 'anchor':
-                        templateText = `Current state: [Current metrics], costs [specific amounts], time delays [specific durations], error rates [percentages], market data [relevant statistics]. Recent studies show [specific findings]. Industry benchmarks indicate [comparison data].`;
-                        break;
-                    case 'detail':
-                        templateText = `Reasoning: AI can [specific capability], recent advances show [specific results], infrastructure supports [specific requirements], competitive pressure demands [specific changes]. Technology readiness: [maturity level]. Market timing: [why now]. Strategic advantage: [competitive benefit].`;
-                        break;
-                    case 'declare':
-                        templateText = `Critical assumptions: AI accuracy reaches [X]%, regulatory approval for [specific process], customer acceptance of [AI application], staff successfully retrain for AI collaboration, data quality improves to support AI, competitors don't block innovation through [specific concern]`;
-                        break;
-                    case 'explain':
-                        templateText = `Need analysis of: technical feasibility gaps, implementation timeline with milestones, change management requirements, competitive advantage sustainability, risk mitigation strategies, resource requirements, regulatory considerations, market readiness indicators.`;
-                        break;
-                    case 'request':
-                        templateText = `Please provide: (1) 18-month implementation roadmap with quarterly milestones, (2) Risk assessment with mitigation strategies, (3) Success metrics and validation checkpoints, (4) Required capabilities and partnerships, (5) Competitive advantage analysis, (6) Business model implications and opportunities`;
-                        break;
-                    default:
-                        console.log('Unknown field type:', fieldType);
-                        return;
-                }
+                document.getElementById('synthesisPrompt').style.display = 'block';
+                document.getElementById('synthesisPrompt').textContent = prompt;
+                document.getElementById('copySynthesisBtn').style.display = 'block';
                 
-                // Try clipboard first
-                if (navigator.clipboard && navigator.clipboard.writeText) {
-                    navigator.clipboard.writeText(templateText).then(() => {
-                        showCopySuccess(event.target);
-                        populateFieldIfEmpty(fieldType, templateText);
-                    }).catch(err => {
-                        console.log('Clipboard failed, using fallback:', err);
-                        fallbackCopy(fieldType, templateText);
-                    });
-                } else {
-                    fallbackCopy(fieldType, templateText);
-                }
-            } catch (error) {
-                console.log('Copy template error:', error);
-                fallbackCopy(fieldType, templateText);
-            }
-        }
-        
-        function fallbackCopy(fieldType, templateText) {
-            // Fallback: populate the field directly
-            const field = document.getElementById(fieldType);
-            if (field) {
-                field.value = templateText;
-                showCopySuccess(event.target, 'Template added to field!');
-            } else {
-                alert('Template: ' + templateText);
-            }
-        }
-        
-        function showCopySuccess(button, message = '✅ Copied!') {
-            const originalText = button.textContent;
-            button.textContent = message;
-            button.style.background = '#4caf50';
-            setTimeout(() => {
-                button.textContent = originalText;
-                button.style.background = '#666666';
-            }, 2000);
-        }
-        
-        function populateFieldIfEmpty(fieldType, templateText) {
-            const field = document.getElementById(fieldType);
-            if (field && !field.value.trim()) {
-                field.value = templateText;
-            }
-        }
-        
-        function copyPrompt(elementId) {
-            try {
-                const element = document.getElementById(elementId);
-                if (!element) {
-                    alert('Prompt not found. Please generate the prompt first.');
-                    return;
-                }
-                
-                const text = element.textContent;
-                if (!text || text.trim() === '') {
-                    alert('No prompt text available. Please complete the LADDER fields first.');
-                    return;
-                }
-                
-                if (navigator.clipboard && navigator.clipboard.writeText) {
-                    navigator.clipboard.writeText(text).then(() => {
-                        showCopySuccess(event.target);
-                    }).catch(err => {
-                        console.log('Clipboard failed:', err);
-                        fallbackPromptCopy(text);
-                    });
-                } else {
-                    fallbackPromptCopy(text);
-                }
-            } catch (error) {
-                console.log('Copy prompt error:', error);
-                alert('Please select and copy the prompt text manually (Ctrl+C or Cmd+C)');
-            }
-        }
-        
-        function fallbackPromptCopy(text) {
-            // Create a temporary textarea to select text
-            const textarea = document.createElement('textarea');
-            textarea.value = text;
-            document.body.appendChild(textarea);
-            textarea.select();
+                document.getElementById('synthesizedFutureText').addEventListener('input', function() {
+                    document.getElementById('step4Next').disabled = this.value.trim().length < 50;
+                });
+            };
             
-            try {
-                document.execCommand('copy');
-                showCopySuccess(event.target);
-            } catch (err) {
-                alert('Please copy the prompt text manually (Ctrl+C or Cmd+C)');
-            }
+            const generateGoalPrompt = () => {
+                saveStepData();
+                const prompt = `TEAM: ${workshopData.teamName}
+TYPE: GOAL SETTING ANALYSIS
+CONTEXT: Based on synthesized 2027 future scenario
+
+LEAD: ${workshopData.goal.lead}
+ANCHOR: ${workshopData.goal.anchor}
+DETAIL: ${workshopData.goal.detail}
+DECLARE: ${workshopData.goal.declare}
+EXPLAIN: ${workshopData.goal.explain}
+REQUEST: ${workshopData.goal.request}
+
+---
+Generated by LADDER Goal Analysis | Chock`;
+                
+                document.getElementById('goalPromptOutput').textContent = prompt;
+                
+                document.getElementById('goalAIResponse').addEventListener('input', function() {
+                    document.getElementById('step6Next').disabled = this.value.trim().length < 50;
+                });
+            };
             
-            document.body.removeChild(textarea);
-        }
-        
-        function updateProgress() {
-            const progressElement = document.getElementById('progressFill');
-            if (progressElement) {
-                const progress = (currentStep / totalSteps) * 100;
-                progressElement.style.width = progress + '%';
-            }
-        }
-        
-        // Safe event listener setup
-        function setupEventListeners() {
-            try {
-                const goalAIResponse = document.getElementById('goalAIResponse');
-                if (goalAIResponse) {
-                    goalAIResponse.addEventListener('input', function() {
-                        const nextButton = document.getElementById('goalResponseNext');
-                        if (nextButton) {
-                            nextButton.disabled = this.value.trim().length < 50;
+            const generateAssumptionPrompt = () => {
+                saveStepData();
+                const prompt = `TEAM: ${workshopData.teamName}
+TYPE: ASSUMPTION MAPPING
+CONTEXT: For goal - "${workshopData.goal.lead}"
+
+LEAD: ${workshopData.assumptions.lead}
+ANCHOR: ${workshopData.assumptions.anchor}
+DETAIL: ${workshopData.assumptions.detail}
+DECLARE: ${workshopData.assumptions.declare}
+EXPLAIN: ${workshopData.assumptions.explain}
+REQUEST: ${workshopData.assumptions.request}
+
+---
+Generated by LADDER Assumption Analysis | Chock`;
+                
+                document.getElementById('assumptionPromptOutput').textContent = prompt;
+                
+                document.getElementById('assumptionAIResponse').addEventListener('input', function() {
+                    document.getElementById('step8Next').disabled = this.value.trim().length < 50;
+                });
+            };
+            
+            const generatePathwayPrompt = () => {
+                saveStepData();
+                const prompt = `TEAM: ${workshopData.teamName}
+TYPE: PATHWAY DEVELOPMENT
+CONTEXT: From current state to goal - "${workshopData.goal.lead}"
+
+LEAD: ${workshopData.pathways.lead}
+ANCHOR: ${workshopData.pathways.anchor}
+DETAIL: ${workshopData.pathways.detail}
+DECLARE: ${workshopData.pathways.declare}
+EXPLAIN: ${workshopData.pathways.explain}
+REQUEST: ${workshopData.pathways.request}
+
+---
+Generated by LADDER Pathway Analysis | Chock`;
+                
+                document.getElementById('pathwayPromptOutput').textContent = prompt;
+                
+                document.getElementById('pathwayAIResponse').addEventListener('input', function() {
+                    workshopData.pathways.aiResponse = this.value;
+                });
+            };
+            
+            const copyPrompt = (elementId) => {
+                const text = document.getElementById(elementId).textContent;
+                navigator.clipboard.writeText(text).then(() => {
+                    const btn = event.target;
+                    const originalText = btn.textContent;
+                    btn.textContent = '✓ Copied!';
+                    btn.style.background = '#4caf50';
+                    
+                    setTimeout(() => {
+                        btn.textContent = originalText;
+                        btn.style.background = '';
+                    }, 2000);
+                }).catch(err => {
+                    console.error('Failed to copy:', err);
+                });
+            };
+            
+            const prepareFinalSummary = () => {
+                document.getElementById('futureBrief').textContent = 
+                    workshopData.synthesizedFuture.substring(0, 150) + '...';
+                
+                document.getElementById('goalBrief').textContent = 
+                    workshopData.goal.lead.substring(0, 150) + '...';
+                
+                if (workshopData.assumptions.aiResponse) {
+                    const assumptionMatches = workshopData.assumptions.aiResponse.match(/\d+[-\s\.]/g);
+                    if (assumptionMatches) {
+                        document.getElementById('assumptionCount').textContent = 
+                            `${assumptionMatches.length} critical assumptions identified`;
+                    }
+                }
+                
+                if (workshopData.pathways.aiResponse) {
+                    const pathwayMatches = workshopData.pathways.aiResponse.match(/pathway|route|approach/gi);
+                    if (pathwayMatches) {
+                        document.getElementById('pathwayCount').textContent = 
+                            `${Math.min(pathwayMatches.length, 5)} implementation pathways mapped`;
+                    }
+                }
+            };
+            
+            const exportWorkshop = () => {
+                let exportContent = `AI INNOVATION WORKSHOP RESULTS
+Team: ${workshopData.teamName}
+Date: ${new Date().toLocaleDateString()}
+
+==========================================
+PROBABILISTIC FUTURE SCENARIO (2027)
+==========================================
+
+Probability Distribution:
+${Object.keys(scenarios).map(key => 
+    `- ${scenarios[key].title}: ${workshopData.probabilities[key] || 0}%`
+).join('\n')}
+
+Key Uncertainties:
+${workshopData.uncertainties.map(u => `- ${u}`).join('\n')}
+
+Industry Context:
+${workshopData.industryContext}
+
+Synthesized Future (2027):
+${workshopData.synthesizedFuture}
+
+==========================================
+BREAKTHROUGH GOAL
+==========================================
+
+${workshopData.goal.lead || ''}
+
+AI Analysis:
+${workshopData.goal.aiResponse || 'Not provided'}
+
+==========================================
+CRITICAL ASSUMPTIONS
+==========================================
+
+${workshopData.assumptions.lead || ''}
+
+AI Analysis:
+${workshopData.assumptions.aiResponse || 'Not provided'}
+
+==========================================
+IMPLEMENTATION PATHWAYS
+==========================================
+
+${workshopData.pathways.lead || ''}
+
+AI Analysis:
+${workshopData.pathways.aiResponse || 'Not provided'}
+
+==========================================
+NEXT STEPS
+==========================================
+
+1. Begin assumption testing with highest-risk items
+2. Establish monitoring system for probability validation
+3. Launch first pathway initiatives
+4. Schedule quarterly probability reassessment
+5. Build partnerships for ecosystem development
+
+---
+Generated by AI Innovation Workshop | Chock
+${new Date().toLocaleString()}`;
+                
+                const blob = new Blob([exportContent], { type: 'text/plain' });
+                const url = window.URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = `AI_Workshop_${workshopData.teamName.replace(/\s+/g, '_')}_${new Date().toISOString().split('T')[0]}.txt`;
+                document.body.appendChild(a);
+                a.click();
+                document.body.removeChild(a);
+                window.URL.revokeObjectURL(url);
+            };
+            
+            const printWorkshop = () => window.print();
+            
+            const restartWorkshop = () => {
+                localStorage.removeItem('workshopData');
+                localStorage.removeItem('currentStep');
+                location.reload();
+            };
+            
+            const saveProgress = () => {
+                localStorage.setItem('workshopData', JSON.stringify(workshopData));
+                localStorage.setItem('currentStep', currentStep);
+            };
+            
+            const restoreFormData = () => {
+                if (workshopData.teamName) {
+                    document.getElementById('teamName').value = workshopData.teamName;
+                    document.getElementById('teamContext').value = workshopData.teamContext || '';
+                }
+            };
+
+            const attachEventListeners = () => {
+                // Settings Modal
+                document.getElementById('settingsBtn').addEventListener('click', toggleSettings);
+                document.getElementById('closeSettingsBtn').addEventListener('click', toggleSettings);
+                document.getElementById('addScenarioBtn').addEventListener('click', addScenario);
+                document.getElementById('saveSettingsBtn').addEventListener('click', saveScenarios);
+                document.getElementById('scenarioEditors').addEventListener('click', (e) => {
+                    if (e.target.classList.contains('remove-scenario-btn') && !e.target.disabled) {
+                        removeScenario(e.target.dataset.key);
+                    }
+                });
+
+                // Step Navigation
+                document.getElementById('step1Next').addEventListener('click', nextStep);
+                document.getElementById('step2Prev').addEventListener('click', prevStep);
+                document.getElementById('step2Next').addEventListener('click', nextStep);
+                document.getElementById('step3Prev').addEventListener('click', prevStep);
+                document.getElementById('step3Next').addEventListener('click', nextStep);
+                document.getElementById('step4Prev').addEventListener('click', prevStep);
+                document.getElementById('step4Next').addEventListener('click', nextStep);
+                document.getElementById('step5Prev').addEventListener('click', prevStep);
+                document.getElementById('step5Next').addEventListener('click', nextStep);
+                document.getElementById('step6Prev').addEventListener('click', prevStep);
+                document.getElementById('step6Next').addEventListener('click', nextStep);
+                document.getElementById('step7Prev').addEventListener('click', prevStep);
+                document.getElementById('step7Next').addEventListener('click', nextStep);
+                document.getElementById('step8Prev').addEventListener('click', prevStep);
+                document.getElementById('step8Next').addEventListener('click', nextStep);
+                document.getElementById('step9Prev').addEventListener('click', prevStep);
+                document.getElementById('step9Next').addEventListener('click', nextStep);
+
+                // Probability Sliders (Event Delegation)
+                document.getElementById('scenario-probability-container').addEventListener('input', (e) => {
+                    if (e.target.classList.contains('probability-slider')) {
+                        updateProbabilities();
+                    }
+                });
+
+                // Prompt Generation & Copy
+                document.getElementById('generateFutureBtn').addEventListener('click', generateFutureSynthesis);
+                document.getElementById('copySynthesisBtn').addEventListener('click', () => copyPrompt('synthesisPrompt'));
+                document.getElementById('copyGoalBtn').addEventListener('click', () => copyPrompt('goalPromptOutput'));
+                document.getElementById('copyAssumptionBtn').addEventListener('click', () => copyPrompt('assumptionPromptOutput'));
+                document.getElementById('copyPathwayBtn').addEventListener('click', () => copyPrompt('pathwayPromptOutput'));
+
+                // Final Actions
+                document.getElementById('exportBtn').addEventListener('click', exportWorkshop);
+                document.getElementById('printBtn').addEventListener('click', printWorkshop);
+                document.getElementById('restartBtn').addEventListener('click', restartWorkshop);
+            };
+
+            // --- Initialization ---
+            onAuthStateChanged(auth, (user) => {
+                if (user) {
+                    console.log("User authenticated, UID:", user.uid);
+                    // Now that we're authenticated, set up the real-time listener
+                    onSnapshot(scenariosDocRef, (doc) => {
+                        console.log("Received scenarios update from Firestore.");
+                        if (doc.exists()) {
+                            const data = doc.data();
+                            if (data.content) {
+                                scenarios = JSON.parse(data.content);
+                                console.log("Loaded scenarios:", scenarios);
+                            }
+                        } else {
+                            console.log("No scenarios document found in Firestore. Using local defaults.");
                         }
+                        updateScenarioDisplay();
+                    }, (error) => {
+                        console.error("Error listening to scenario updates:", error);
                     });
+
+                    // Restore progress after we have user auth and initial data
+                    const savedData = localStorage.getItem('workshopData');
+                    const savedStep = localStorage.getItem('currentStep');
+                    
+                    if (savedData && savedStep) {
+                        workshopData = JSON.parse(savedData);
+                        currentStep = parseInt(savedStep);
+                        
+                        document.getElementById('step1').classList.remove('active');
+                        document.getElementById(`step${currentStep}`).classList.add('active');
+                        updateProgress();
+                        updatePhase();
+                        restoreFormData();
+                    }
+                } else {
+                    console.log("User is not authenticated.");
                 }
-            } catch (error) {
-                console.log('Event listener setup error:', error);
-            }
-        }
-        
-        // Initialize when DOM is ready
-        if (document.readyState === 'loading') {
-            document.addEventListener('DOMContentLoaded', setupEventListeners);
-        } else {
-            setupEventListeners();
-        }
+            });
+
+            // Trigger the authentication flow
+            (async () => {
+                try {
+                    if (typeof __initial_auth_token !== 'undefined' && __initial_auth_token) {
+                        await signInWithCustomToken(auth, __initial_auth_token);
+                    } else {
+                        await signInAnonymously(auth);
+                    }
+                } catch(error) {
+                    console.error("Error during sign-in:", error);
+                }
+            })();
+            
+            attachEventListeners();
+            window.addEventListener('beforeunload', saveProgress);
+        });
     </script>
 </body>
 </html>
